@@ -1,0 +1,194 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 8 1
+    bytecblock "balance" 0x151f7c75
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // examples/devportal/logged_errors/contract.algo.ts:24
+    // balance = GlobalState({ initialValue: Uint64(0) })
+    bytec_0 // "balance"
+    intc_0 // 0
+    app_global_put
+
+main_after_if_else@2:
+    // examples/devportal/logged_errors/contract.algo.ts:23
+    // export class LoggedErrors extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@12
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x88048581 0x31214176 0x7d535a3b // method "deposit(uint64)uint64", method "withdraw(uint64)uint64", method "reject(uint64)uint64"
+    txna ApplicationArgs 0
+    match deposit withdraw reject
+    err
+
+main___algots__.defaultCreate@12:
+    // examples/devportal/logged_errors/contract.algo.ts:23
+    // export class LoggedErrors extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// examples/devportal/logged_errors/contract.algo.ts::LoggedErrors.deposit[routing]() -> void:
+deposit:
+    // examples/devportal/logged_errors/contract.algo.ts:26
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/logged_errors/contract.algo.ts:28
+    // this.balance.value += amount
+    intc_0 // 0
+    // examples/devportal/logged_errors/contract.algo.ts:24
+    // balance = GlobalState({ initialValue: Uint64(0) })
+    bytec_0 // "balance"
+    // examples/devportal/logged_errors/contract.algo.ts:28
+    // this.balance.value += amount
+    app_global_get_ex
+    assert // check GlobalState exists
+    +
+    // examples/devportal/logged_errors/contract.algo.ts:24
+    // balance = GlobalState({ initialValue: Uint64(0) })
+    bytec_0 // "balance"
+    // examples/devportal/logged_errors/contract.algo.ts:28
+    // this.balance.value += amount
+    dig 1
+    app_global_put
+    // examples/devportal/logged_errors/contract.algo.ts:26
+    // @abimethod()
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// examples/devportal/logged_errors/contract.algo.ts::LoggedErrors.withdraw[routing]() -> void:
+withdraw:
+    // examples/devportal/logged_errors/contract.algo.ts:33
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    // examples/devportal/logged_errors/contract.algo.ts:40-43
+    // loggedAssert(amount > 0, 'amountError01', {
+    //   message: 'amount must be positive',
+    //   desc: 'Withdrawal amount must be greater than zero',
+    // })
+    bnz withdraw_after_assert@3
+    pushbytes "ERR:amountError01:amount must be positive"
+    log
+    err // Withdrawal amount must be greater than zero
+
+withdraw_after_assert@3:
+    // examples/devportal/logged_errors/contract.algo.ts:44
+    // loggedAssert(amount <= this.balance.value, 'amountError02', 'insufficient balance')
+    intc_0 // 0
+    // examples/devportal/logged_errors/contract.algo.ts:24
+    // balance = GlobalState({ initialValue: Uint64(0) })
+    bytec_0 // "balance"
+    // examples/devportal/logged_errors/contract.algo.ts:44
+    // loggedAssert(amount <= this.balance.value, 'amountError02', 'insufficient balance')
+    app_global_get_ex
+    assert // check GlobalState exists
+    dig 1
+    >=
+    bnz withdraw_after_assert@5
+    pushbytes "ERR:amountError02:insufficient balance"
+    log
+    err // ERR:amountError02:insufficient balance
+
+withdraw_after_assert@5:
+    // examples/devportal/logged_errors/contract.algo.ts:46
+    // this.balance.value -= amount
+    intc_0 // 0
+    // examples/devportal/logged_errors/contract.algo.ts:24
+    // balance = GlobalState({ initialValue: Uint64(0) })
+    bytec_0 // "balance"
+    // examples/devportal/logged_errors/contract.algo.ts:46
+    // this.balance.value -= amount
+    app_global_get_ex
+    assert // check GlobalState exists
+    swap
+    -
+    // examples/devportal/logged_errors/contract.algo.ts:24
+    // balance = GlobalState({ initialValue: Uint64(0) })
+    bytec_0 // "balance"
+    // examples/devportal/logged_errors/contract.algo.ts:46
+    // this.balance.value -= amount
+    dig 1
+    app_global_put
+    // examples/devportal/logged_errors/contract.algo.ts:33
+    // @abimethod()
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// examples/devportal/logged_errors/contract.algo.ts::LoggedErrors.reject[routing]() -> void:
+reject:
+    // examples/devportal/logged_errors/contract.algo.ts:53
+    // @abimethod()
+    txna ApplicationArgs 1
+    dupn 2
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    // examples/devportal/logged_errors/contract.algo.ts:58
+    // if (code === 0) {
+    bnz reject_after_if_else@3
+    // examples/devportal/logged_errors/contract.algo.ts:59
+    // loggedErr('codeRange00', 'code zero is reserved')
+    pushbytes "ERR:codeRange00:code zero is reserved"
+    log
+    err // ERR:codeRange00:code zero is reserved
+
+reject_after_if_else@3:
+    // examples/devportal/logged_errors/contract.algo.ts:61
+    // if (code > 100) {
+    pushint 100
+    >
+    bz reject_after_if_else@5
+    // examples/devportal/logged_errors/contract.algo.ts:62
+    // loggedErr('codeRange01', 'code out of range')
+    pushbytes "ERR:codeRange01:code out of range"
+    log
+    err // ERR:codeRange01:code out of range
+
+reject_after_if_else@5:
+    // examples/devportal/logged_errors/contract.algo.ts:53
+    // @abimethod()
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return

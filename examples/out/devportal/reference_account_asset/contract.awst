@@ -1,0 +1,29 @@
+contract ReferenceAccountAsset
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getAssetBalance(): uint64
+  {
+    assert(asset_holding_get<AssetBalance>(TemplateVar[account](TMPL_KNOWN_ACCOUNT), TemplateVar[asset](TMPL_KNOWN_ASSET)).1, comment=Account is not opted in to the asset)
+    return checked_maybe(asset_holding_get<AssetBalance>(TemplateVar[account](TMPL_KNOWN_ACCOUNT), TemplateVar[asset](TMPL_KNOWN_ASSET)), comment=account opted into asset)
+  }
+  
+  getAssetBalanceWithArg(account: account, asset: asset): uint64
+  {
+    assert(asset_holding_get<AssetBalance>(account, asset).1, comment=Account is not opted in to the asset)
+    return checked_maybe(asset_holding_get<AssetBalance>(account, asset), comment=account opted into asset)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

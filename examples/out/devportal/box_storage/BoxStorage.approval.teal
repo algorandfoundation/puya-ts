@@ -1,0 +1,1332 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 8 0 2
+    bytecblock "boxNested" 0x151f7c75 "boxInt" "BOX_STRING" "blob" "b" 0x00 "scratch" "users" "BOX_BYTES" 0x00010203 0x151f7c7580 0x00023432 "42" 0x75736572730000000000000000 "hello" 0x0000
+    // examples/devportal/box_storage/contract.algo.ts:30
+    // export class BoxStorage extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@35
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0xb7491344 0xbe42351f 0xa2364d0b 0x6ab3e9bc 0xfb1c74f6 0xd887b40c 0x53c28820 0x4fee640f 0xfa1562f7 0x9e11fd7a 0xd5dd922c 0x5bbd1dad 0x9101a7de 0xa4552eb5 0xe5735ee1 0xf53418c4 0x4b6b8d3c 0xa24933c5 0x9ab829b7 0x683b5c64 0xa5a626fe 0x509474ca 0x9c92b0ab 0xd829d2a3 0xf183207a 0xb1f5a9b6 0xbd710c54 0x8766c6b1 // method "getBox()uint64", method "getItemBoxMap(uint64)string", method "getBoxMap()string", method "maybeBox()(uint64,bool)", method "maybeBoxMap()(string,bool)", method "getBoxExample()(uint64,byte[],string)", method "getBoxMapStruct(uint64)(string,uint64,uint64)", method "readBoxPassedToSubroutine(uint64)string", method "setBox(uint64)void", method "setBoxMap(uint64,string)void", method "setBoxMapStruct(uint64,(string,uint64,uint64))bool", method "setBoxExample(uint64,byte[],string)void", method "deleteBox()void", method "deleteBoxMap(uint64)void", method "boxIntLength()uint64", method "boxMapLength(uint64)uint64", method "boxMapStructLength()bool", method "extractBox()void", method "existBox()(bool,bool,bool,bool)", method "sliceBox()void", method "arc4Box()void", method "keyBox()byte[]", method "keyBoxExample()void", method "boxMapExists(uint64)bool", method "boxMapStructExists(uint64)bool", method "keyPrefixBoxMap()byte[]", method "nestedStructWrite(uint64)void", method "nestedStructSum()uint64"
+    txna ApplicationArgs 0
+    match getBox getItemBoxMap getBoxMap maybeBox maybeBoxMap getBoxExample getBoxMapStruct readBoxPassedToSubroutine setBox setBoxMap setBoxMapStruct setBoxExample deleteBox deleteBoxMap boxIntLength boxMapLength boxMapStructLength extractBox existBox sliceBox arc4Box main_keyBox_route@25 main_keyBoxExample_route@26 boxMapExists boxMapStructExists main_keyPrefixBoxMap_route@29 nestedStructWrite nestedStructSum
+    err
+
+main_keyPrefixBoxMap_route@29:
+    // examples/devportal/box_storage/contract.algo.ts:249
+    // public keyPrefixBoxMap(): bytes {
+    pushbytes 0x151f7c750000
+    log
+    intc_0 // 1
+    return
+
+main_keyBoxExample_route@26:
+    // examples/devportal/box_storage/contract.algo.ts:231
+    // public keyBoxExample(): void {
+    intc_0 // 1
+    return
+
+main_keyBox_route@25:
+    // examples/devportal/box_storage/contract.algo.ts:227
+    // public keyBox(): bytes {
+    pushbytes 0x151f7c750006626f78496e74
+    log
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@35:
+    // examples/devportal/box_storage/contract.algo.ts:30
+    // export class BoxStorage extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.getBox[routing]() -> void:
+getBox:
+    // examples/devportal/box_storage/contract.algo.ts:33
+    // boxInt = Box<uint64>({ key: 'boxInt' })
+    bytec_2 // "boxInt"
+    // examples/devportal/box_storage/contract.algo.ts:50
+    // return this.boxInt.value
+    box_get
+    assert // Box must have value
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:48
+    // public getBox(): uint64 {
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.getItemBoxMap[routing]() -> void:
+getItemBoxMap:
+    // examples/devportal/box_storage/contract.algo.ts:53
+    // public getItemBoxMap(key: uint64): string {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:55
+    // return this.boxMap(key).value
+    itob
+    box_get
+    assert // Box must have value
+    // examples/devportal/box_storage/contract.algo.ts:53
+    // public getItemBoxMap(key: uint64): string {
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.getBoxMap[routing]() -> void:
+getBoxMap:
+    // examples/devportal/box_storage/contract.algo.ts:60
+    // return this.boxMap(1).get({ default: 'default' })
+    intc_0 // 1
+    itob
+    box_get
+    pushbytes "default"
+    cover 2
+    select
+    // examples/devportal/box_storage/contract.algo.ts:58
+    // public getBoxMap(): string {
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.maybeBox[routing]() -> void:
+maybeBox:
+    // examples/devportal/box_storage/contract.algo.ts:33
+    // boxInt = Box<uint64>({ key: 'boxInt' })
+    bytec_2 // "boxInt"
+    // examples/devportal/box_storage/contract.algo.ts:65
+    // return this.boxInt.maybe()
+    box_get
+    swap
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:63
+    // public maybeBox(): readonly [uint64, boolean] {
+    itob
+    bytec 6 // 0x00
+    intc_2 // 0
+    uncover 3
+    setbit
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.maybeBoxMap[routing]() -> void:
+maybeBoxMap:
+    // examples/devportal/box_storage/contract.algo.ts:69
+    // const [value, exists] = this.boxMap(1).maybe()
+    intc_0 // 1
+    itob
+    box_get
+    dup
+    uncover 2
+    swap
+    // examples/devportal/box_storage/contract.algo.ts:70
+    // return [exists ? value : '', exists] as const
+    bz maybeBoxMap_ternary_false@3
+
+maybeBoxMap_ternary_merge@4:
+    // examples/devportal/box_storage/contract.algo.ts:68
+    // public maybeBoxMap(): readonly [string, boolean] {
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec 6 // 0x00
+    intc_2 // 0
+    uncover 3
+    setbit
+    pushbytes 0x0003
+    swap
+    concat
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+maybeBoxMap_ternary_false@3:
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:70
+    // return [exists ? value : '', exists] as const
+    pushbytes ""
+    b maybeBoxMap_ternary_merge@4
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.getBoxExample[routing]() -> void:
+getBoxExample:
+    // examples/devportal/box_storage/contract.algo.ts:33
+    // boxInt = Box<uint64>({ key: 'boxInt' })
+    bytec_2 // "boxInt"
+    // examples/devportal/box_storage/contract.algo.ts:77
+    // return [this.boxInt.value, this.boxDynamicBytes.value.native, this.boxString.value] as const
+    box_get
+    assert // Box must have value
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:35
+    // boxDynamicBytes = Box<arc4.DynamicBytes>({ key: 'b' })
+    bytec 5 // "b"
+    // examples/devportal/box_storage/contract.algo.ts:77
+    // return [this.boxInt.value, this.boxDynamicBytes.value.native, this.boxString.value] as const
+    box_get
+    assert // Box must have value
+    extract 2 0
+    // examples/devportal/box_storage/contract.algo.ts:36
+    // boxString = Box<arc4.Str>({ key: Bytes('BOX_STRING') })
+    bytec_3 // "BOX_STRING"
+    // examples/devportal/box_storage/contract.algo.ts:77
+    // return [this.boxInt.value, this.boxDynamicBytes.value.native, this.boxString.value] as const
+    box_get
+    assert // Box must have value
+    // examples/devportal/box_storage/contract.algo.ts:76
+    // public getBoxExample(): readonly [uint64, bytes, arc4.Str] {
+    uncover 2
+    itob
+    dig 2
+    len
+    itob
+    extract 6 2
+    uncover 3
+    concat
+    swap
+    pushbytes 0x000c
+    concat
+    dig 1
+    len
+    pushint 12
+    +
+    itob
+    extract 6 2
+    concat
+    swap
+    concat
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.getBoxMapStruct[routing]() -> void:
+getBoxMapStruct:
+    // examples/devportal/box_storage/contract.algo.ts:80
+    // public getBoxMapStruct(key: uint64): UserStruct {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:81
+    // return clone(this.boxMapStruct(key).value)
+    itob
+    // examples/devportal/box_storage/contract.algo.ts:41
+    // boxMapStruct = BoxMap<uint64, UserStruct>({ keyPrefix: 'users' })
+    bytec 8 // "users"
+    swap
+    concat
+    // examples/devportal/box_storage/contract.algo.ts:81
+    // return clone(this.boxMapStruct(key).value)
+    box_get
+    assert // Box must have value
+    // examples/devportal/box_storage/contract.algo.ts:80
+    // public getBoxMapStruct(key: uint64): UserStruct {
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.readBoxPassedToSubroutine[routing]() -> void:
+readBoxPassedToSubroutine:
+    // examples/devportal/box_storage/contract.algo.ts:84
+    // public readBoxPassedToSubroutine(key: uint64): string {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:284
+    // return boxMap(key + 1).value
+    intc_0 // 1
+    +
+    itob
+    box_get
+    assert // Box must have value
+    // examples/devportal/box_storage/contract.algo.ts:84
+    // public readBoxPassedToSubroutine(key: uint64): string {
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.setBox[routing]() -> void:
+setBox:
+    // examples/devportal/box_storage/contract.algo.ts:92
+    // public setBox(value: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:93
+    // this.boxInt.value = value
+    itob
+    // examples/devportal/box_storage/contract.algo.ts:33
+    // boxInt = Box<uint64>({ key: 'boxInt' })
+    bytec_2 // "boxInt"
+    // examples/devportal/box_storage/contract.algo.ts:93
+    // this.boxInt.value = value
+    swap
+    box_put
+    // examples/devportal/box_storage/contract.algo.ts:92
+    // public setBox(value: uint64): void {
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.setBoxMap[routing]() -> void:
+setBoxMap:
+    // examples/devportal/box_storage/contract.algo.ts:96
+    // public setBoxMap(key: uint64, value: string): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    intc_2 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // examples/devportal/box_storage/contract.algo.ts:97
+    // this.boxMap(key).value = value
+    swap
+    itob
+    dup
+    box_del
+    pop
+    swap
+    box_put
+    // examples/devportal/box_storage/contract.algo.ts:96
+    // public setBoxMap(key: uint64, value: string): void {
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.setBoxMapStruct[routing]() -> void:
+setBoxMapStruct:
+    // examples/devportal/box_storage/contract.algo.ts:100
+    // public setBoxMapStruct(key: uint64, value: UserStruct): boolean {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    dig 1
+    intc_2 // 0
+    extract_uint16 // on error: invalid tuple encoding
+    dup
+    pushint 18
+    ==
+    assert // invalid tail pointer at index 0 of ((len+utf8[]),uint64,uint64)
+    dig 2
+    swap
+    dig 2
+    substring3
+    intc_2 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 20
+    +
+    ==
+    assert // invalid number of bytes for UserStruct
+    // examples/devportal/box_storage/contract.algo.ts:103
+    // this.boxMapStruct(key).value = clone(value)
+    swap
+    itob
+    // examples/devportal/box_storage/contract.algo.ts:41
+    // boxMapStruct = BoxMap<uint64, UserStruct>({ keyPrefix: 'users' })
+    bytec 8 // "users"
+    swap
+    concat
+    // examples/devportal/box_storage/contract.algo.ts:103
+    // this.boxMapStruct(key).value = clone(value)
+    dup
+    box_del
+    pop
+    swap
+    box_put
+    // examples/devportal/box_storage/contract.algo.ts:100
+    // public setBoxMapStruct(key: uint64, value: UserStruct): boolean {
+    bytec 11 // 0x151f7c7580
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.setBoxExample[routing]() -> void:
+setBoxExample:
+    // examples/devportal/box_storage/contract.algo.ts:111
+    // public setBoxExample(valueInt: uint64, valueDbytes: arc4.DynamicBytes, valueString: arc4.Str): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    intc_2 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    txna ApplicationArgs 3
+    dup
+    intc_2 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    // examples/devportal/box_storage/contract.algo.ts:112
+    // this.boxInt.value = valueInt
+    uncover 2
+    itob
+    // examples/devportal/box_storage/contract.algo.ts:33
+    // boxInt = Box<uint64>({ key: 'boxInt' })
+    bytec_2 // "boxInt"
+    // examples/devportal/box_storage/contract.algo.ts:112
+    // this.boxInt.value = valueInt
+    swap
+    box_put
+    // examples/devportal/box_storage/contract.algo.ts:35
+    // boxDynamicBytes = Box<arc4.DynamicBytes>({ key: 'b' })
+    bytec 5 // "b"
+    // examples/devportal/box_storage/contract.algo.ts:113
+    // this.boxDynamicBytes.value = clone(valueDbytes)
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:35
+    // boxDynamicBytes = Box<arc4.DynamicBytes>({ key: 'b' })
+    bytec 5 // "b"
+    // examples/devportal/box_storage/contract.algo.ts:113
+    // this.boxDynamicBytes.value = clone(valueDbytes)
+    dig 2
+    box_put
+    // examples/devportal/box_storage/contract.algo.ts:36
+    // boxString = Box<arc4.Str>({ key: Bytes('BOX_STRING') })
+    bytec_3 // "BOX_STRING"
+    // examples/devportal/box_storage/contract.algo.ts:114
+    // this.boxString.value = valueString
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:36
+    // boxString = Box<arc4.Str>({ key: Bytes('BOX_STRING') })
+    bytec_3 // "BOX_STRING"
+    // examples/devportal/box_storage/contract.algo.ts:114
+    // this.boxString.value = valueString
+    swap
+    box_put
+    // examples/devportal/box_storage/contract.algo.ts:115
+    // this.boxBytes.value = valueDbytes.native
+    extract 2 0
+    // examples/devportal/box_storage/contract.algo.ts:37
+    // boxBytes = Box<bytes>({ key: Bytes('BOX_BYTES') })
+    bytec 9 // "BOX_BYTES"
+    // examples/devportal/box_storage/contract.algo.ts:115
+    // this.boxBytes.value = valueDbytes.native
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:37
+    // boxBytes = Box<bytes>({ key: Bytes('BOX_BYTES') })
+    bytec 9 // "BOX_BYTES"
+    // examples/devportal/box_storage/contract.algo.ts:115
+    // this.boxBytes.value = valueDbytes.native
+    swap
+    box_put
+    // examples/devportal/box_storage/contract.algo.ts:33
+    // boxInt = Box<uint64>({ key: 'boxInt' })
+    bytec_2 // "boxInt"
+    // examples/devportal/box_storage/contract.algo.ts:118
+    // this.boxInt.value += 3
+    box_get
+    assert // Box must have value
+    btoi
+    pushint 3
+    +
+    itob
+    // examples/devportal/box_storage/contract.algo.ts:33
+    // boxInt = Box<uint64>({ key: 'boxInt' })
+    bytec_2 // "boxInt"
+    // examples/devportal/box_storage/contract.algo.ts:118
+    // this.boxInt.value += 3
+    swap
+    box_put
+    // examples/devportal/box_storage/contract.algo.ts:111
+    // public setBoxExample(valueInt: uint64, valueDbytes: arc4.DynamicBytes, valueString: arc4.Str): void {
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.deleteBox[routing]() -> void:
+deleteBox:
+    // examples/devportal/box_storage/contract.algo.ts:33
+    // boxInt = Box<uint64>({ key: 'boxInt' })
+    bytec_2 // "boxInt"
+    // examples/devportal/box_storage/contract.algo.ts:126
+    // this.boxInt.delete()
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:35
+    // boxDynamicBytes = Box<arc4.DynamicBytes>({ key: 'b' })
+    bytec 5 // "b"
+    // examples/devportal/box_storage/contract.algo.ts:127
+    // this.boxDynamicBytes.delete()
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:36
+    // boxString = Box<arc4.Str>({ key: Bytes('BOX_STRING') })
+    bytec_3 // "BOX_STRING"
+    // examples/devportal/box_storage/contract.algo.ts:128
+    // this.boxString.delete()
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:33
+    // boxInt = Box<uint64>({ key: 'boxInt' })
+    bytec_2 // "boxInt"
+    // examples/devportal/box_storage/contract.algo.ts:131
+    // assert(this.boxInt.get({ default: Uint64(42) }) === 42, 'box_int must be deleted')
+    box_get
+    swap
+    btoi
+    pushint 42
+    swap
+    uncover 2
+    select
+    pushint 42
+    ==
+    assert // box_int must be deleted
+    // examples/devportal/box_storage/contract.algo.ts:35
+    // boxDynamicBytes = Box<arc4.DynamicBytes>({ key: 'b' })
+    bytec 5 // "b"
+    // examples/devportal/box_storage/contract.algo.ts:133
+    // this.boxDynamicBytes.get({ default: new arc4.DynamicBytes(Bytes('42')) }).native === Bytes('42'),
+    box_get
+    bytec 12 // 0x00023432
+    cover 2
+    select
+    extract 2 0
+    bytec 13 // "42"
+    ==
+    // examples/devportal/box_storage/contract.algo.ts:132-135
+    // assert(
+    //   this.boxDynamicBytes.get({ default: new arc4.DynamicBytes(Bytes('42')) }).native === Bytes('42'),
+    //   'box_dynamic_bytes must be deleted',
+    // )
+    assert // box_dynamic_bytes must be deleted
+    // examples/devportal/box_storage/contract.algo.ts:36
+    // boxString = Box<arc4.Str>({ key: Bytes('BOX_STRING') })
+    bytec_3 // "BOX_STRING"
+    // examples/devportal/box_storage/contract.algo.ts:136
+    // assert(this.boxString.get({ default: new arc4.Str('42') }).native === '42', 'box_string must be deleted')
+    box_get
+    bytec 12 // 0x00023432
+    cover 2
+    select
+    extract 2 0
+    bytec 13 // "42"
+    ==
+    assert // box_string must be deleted
+    // examples/devportal/box_storage/contract.algo.ts:124
+    // public deleteBox(): void {
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.deleteBoxMap[routing]() -> void:
+deleteBoxMap:
+    // examples/devportal/box_storage/contract.algo.ts:139
+    // public deleteBoxMap(key: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:140
+    // this.boxMap(key).delete()
+    itob
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:139
+    // public deleteBoxMap(key: uint64): void {
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.boxIntLength[routing]() -> void:
+boxIntLength:
+    // examples/devportal/box_storage/contract.algo.ts:33
+    // boxInt = Box<uint64>({ key: 'boxInt' })
+    bytec_2 // "boxInt"
+    // examples/devportal/box_storage/contract.algo.ts:148
+    // return this.boxInt.length
+    box_len
+    assert // Box must have value
+    // examples/devportal/box_storage/contract.algo.ts:146
+    // public boxIntLength(): uint64 {
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.boxMapLength[routing]() -> void:
+boxMapLength:
+    // examples/devportal/box_storage/contract.algo.ts:151
+    // public boxMapLength(key: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:152
+    // if (!this.boxMap(key).exists) {
+    itob
+    dup
+    box_len
+    bury 1
+    bnz boxMapLength_after_if_else@3
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:153
+    // return Uint64(0)
+    intc_2 // 0
+
+boxMapLength_after_inlined_examples/devportal/box_storage/contract.algo.ts::BoxStorage.boxMapLength@4:
+    // examples/devportal/box_storage/contract.algo.ts:151
+    // public boxMapLength(key: uint64): uint64 {
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+boxMapLength_after_if_else@3:
+    // examples/devportal/box_storage/contract.algo.ts:155
+    // return this.boxMap(key).length
+    box_len
+    assert // Box must have value
+    // examples/devportal/box_storage/contract.algo.ts:151
+    // public boxMapLength(key: uint64): uint64 {
+    b boxMapLength_after_inlined_examples/devportal/box_storage/contract.algo.ts::BoxStorage.boxMapLength@4
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.boxMapStructLength[routing]() -> void:
+boxMapStructLength:
+    // examples/devportal/box_storage/contract.algo.ts:41
+    // boxMapStruct = BoxMap<uint64, UserStruct>({ keyPrefix: 'users' })
+    bytec 14 // 0x75736572730000000000000000
+    // examples/devportal/box_storage/contract.algo.ts:162
+    // this.boxMapStruct(key).value = clone(value)
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:41
+    // boxMapStruct = BoxMap<uint64, UserStruct>({ keyPrefix: 'users' })
+    bytec 14 // 0x75736572730000000000000000
+    // examples/devportal/box_storage/contract.algo.ts:160
+    // const value = new UserStruct({ name: new arc4.Str('testName'), id: new arc4.Uint64(70), asset: new arc4.Uint64(2) })
+    pushbytes 0x0012000000000000004600000000000000020008746573744e616d65
+    // examples/devportal/box_storage/contract.algo.ts:162
+    // this.boxMapStruct(key).value = clone(value)
+    box_put
+    // examples/devportal/box_storage/contract.algo.ts:158
+    // public boxMapStructLength(): boolean {
+    bytec 11 // 0x151f7c7580
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.extractBox[routing]() -> void:
+extractBox:
+    // examples/devportal/box_storage/contract.algo.ts:176
+    // assert(box.create({ size: Uint64(32) }), 'box must not exist yet')
+    bytec 4 // "blob"
+    pushint 32
+    box_create
+    assert // box must not exist yet
+    // examples/devportal/box_storage/contract.algo.ts:179
+    // const senderBytes = Txn.sender.bytes
+    txn Sender
+    // examples/devportal/box_storage/contract.algo.ts:180
+    // const appAddress = Global.currentApplicationAddress.bytes
+    global CurrentApplicationAddress
+    // examples/devportal/box_storage/contract.algo.ts:183
+    // box.replace(0, senderBytes)
+    bytec 4 // "blob"
+    intc_2 // 0
+    dig 3
+    box_replace
+    // examples/devportal/box_storage/contract.algo.ts:186
+    // box.resize(32 * 2 + value3.length)
+    bytec 4 // "blob"
+    pushint 69
+    box_resize
+    // examples/devportal/box_storage/contract.algo.ts:190
+    // box.splice(0, 0, appAddress)
+    bytec 4 // "blob"
+    intc_2 // 0
+    dup
+    dig 3
+    box_splice
+    // examples/devportal/box_storage/contract.algo.ts:191
+    // box.replace(64, value3)
+    bytec 4 // "blob"
+    pushint 64
+    bytec 15 // "hello"
+    box_replace
+    // examples/devportal/box_storage/contract.algo.ts:193
+    // const prefix = box.extract(0, 32 * 2 + value3.length)
+    bytec 4 // "blob"
+    intc_2 // 0
+    pushint 69
+    box_extract
+    // examples/devportal/box_storage/contract.algo.ts:194
+    // assert(prefix === appAddress.concat(senderBytes).concat(value3), 'unexpected box contents')
+    swap
+    uncover 2
+    concat
+    bytec 15 // "hello"
+    concat
+    ==
+    assert // unexpected box contents
+    // examples/devportal/box_storage/contract.algo.ts:195
+    // box.delete()
+    bytec 4 // "blob"
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:172
+    // public extractBox(): void {
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.existBox[routing]() -> void:
+existBox:
+    // examples/devportal/box_storage/contract.algo.ts:33
+    // boxInt = Box<uint64>({ key: 'boxInt' })
+    bytec_2 // "boxInt"
+    // examples/devportal/box_storage/contract.algo.ts:203
+    // return [this.boxInt.exists, this.boxDynamicBytes.exists, this.boxString.exists, this.boxBytes.exists] as const
+    box_len
+    bury 1
+    // examples/devportal/box_storage/contract.algo.ts:35
+    // boxDynamicBytes = Box<arc4.DynamicBytes>({ key: 'b' })
+    bytec 5 // "b"
+    // examples/devportal/box_storage/contract.algo.ts:203
+    // return [this.boxInt.exists, this.boxDynamicBytes.exists, this.boxString.exists, this.boxBytes.exists] as const
+    box_len
+    cover 2
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:36
+    // boxString = Box<arc4.Str>({ key: Bytes('BOX_STRING') })
+    bytec_3 // "BOX_STRING"
+    // examples/devportal/box_storage/contract.algo.ts:203
+    // return [this.boxInt.exists, this.boxDynamicBytes.exists, this.boxString.exists, this.boxBytes.exists] as const
+    box_len
+    cover 3
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:37
+    // boxBytes = Box<bytes>({ key: Bytes('BOX_BYTES') })
+    bytec 9 // "BOX_BYTES"
+    // examples/devportal/box_storage/contract.algo.ts:203
+    // return [this.boxInt.exists, this.boxDynamicBytes.exists, this.boxString.exists, this.boxBytes.exists] as const
+    box_len
+    cover 4
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:201
+    // public existBox(): readonly [boolean, boolean, boolean, boolean] {
+    bytec 6 // 0x00
+    intc_2 // 0
+    uncover 2
+    setbit
+    intc_0 // 1
+    uncover 2
+    setbit
+    intc_3 // 2
+    uncover 2
+    setbit
+    pushint 3
+    uncover 2
+    setbit
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.sliceBox[routing]() -> void:
+sliceBox:
+    // examples/devportal/box_storage/contract.algo.ts:208
+    // box0.value = Bytes('Testing testing 123')
+    bytec 7 // "scratch"
+    box_del
+    pop
+    bytec 7 // "scratch"
+    pushbytes "Testing testing 123"
+    box_put
+    // examples/devportal/box_storage/contract.algo.ts:209
+    // assert(box0.value.slice(0, 7) === Bytes('Testing'), 'box value must support slicing')
+    bytec 7 // "scratch"
+    intc_2 // 0
+    pushint 7
+    box_extract
+    pushbytes "Testing"
+    ==
+    assert // box value must support slicing
+    // examples/devportal/box_storage/contract.algo.ts:36
+    // boxString = Box<arc4.Str>({ key: Bytes('BOX_STRING') })
+    bytec_3 // "BOX_STRING"
+    // examples/devportal/box_storage/contract.algo.ts:211
+    // this.boxString.value = new arc4.Str('Hello')
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:36
+    // boxString = Box<arc4.Str>({ key: Bytes('BOX_STRING') })
+    bytec_3 // "BOX_STRING"
+    // examples/devportal/box_storage/contract.algo.ts:211
+    // this.boxString.value = new arc4.Str('Hello')
+    pushbytes 0x000548656c6c6f
+    box_put
+    // examples/devportal/box_storage/contract.algo.ts:36
+    // boxString = Box<arc4.Str>({ key: Bytes('BOX_STRING') })
+    bytec_3 // "BOX_STRING"
+    // examples/devportal/box_storage/contract.algo.ts:214
+    // assert(this.boxString.value.bytes.slice(2, 10) === Bytes('Hello'), 'unexpected string contents')
+    intc_3 // 2
+    pushint 5
+    box_extract
+    pushbytes "Hello"
+    ==
+    assert // unexpected string contents
+    // examples/devportal/box_storage/contract.algo.ts:215
+    // box0.delete()
+    bytec 7 // "scratch"
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:206
+    // public sliceBox(): void {
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.arc4Box[routing]() -> void:
+arc4Box:
+    // examples/devportal/box_storage/contract.algo.ts:220
+    // boxD.value = new arc4.StaticArray(new arc4.Uint8(0), new arc4.Uint8(1), new arc4.Uint8(2), new arc4.Uint8(3))
+    pushbytes "d"
+    bytec 10 // 0x00010203
+    box_put
+    bytec 10 // 0x00010203
+    // examples/devportal/box_storage/contract.algo.ts:222
+    // assert(boxD.value[0].asUint64() === 0, 'first element must be 0')
+    intc_2 // 0
+    getbyte
+    !
+    assert // first element must be 0
+    // examples/devportal/box_storage/contract.algo.ts:220
+    // boxD.value = new arc4.StaticArray(new arc4.Uint8(0), new arc4.Uint8(1), new arc4.Uint8(2), new arc4.Uint8(3))
+    bytec 10 // 0x00010203
+    // examples/devportal/box_storage/contract.algo.ts:223
+    // assert(boxD.value[3].asUint64() === 3, 'last element must be 3')
+    pushint 3
+    getbyte
+    pushint 3
+    ==
+    assert // last element must be 3
+    // examples/devportal/box_storage/contract.algo.ts:224
+    // boxD.delete()
+    pushbytes "d"
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:218
+    // public arc4Box(): void {
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.boxMapExists[routing]() -> void:
+boxMapExists:
+    // examples/devportal/box_storage/contract.algo.ts:240
+    // public boxMapExists(key: uint64): boolean {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:242
+    // return this.boxMap(key).exists
+    itob
+    box_len
+    bury 1
+    // examples/devportal/box_storage/contract.algo.ts:240
+    // public boxMapExists(key: uint64): boolean {
+    bytec 6 // 0x00
+    intc_2 // 0
+    uncover 2
+    setbit
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.boxMapStructExists[routing]() -> void:
+boxMapStructExists:
+    // examples/devportal/box_storage/contract.algo.ts:245
+    // public boxMapStructExists(key: uint64): boolean {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:246
+    // return this.boxMapStruct(key).exists
+    itob
+    // examples/devportal/box_storage/contract.algo.ts:41
+    // boxMapStruct = BoxMap<uint64, UserStruct>({ keyPrefix: 'users' })
+    bytec 8 // "users"
+    swap
+    concat
+    // examples/devportal/box_storage/contract.algo.ts:246
+    // return this.boxMapStruct(key).exists
+    box_len
+    bury 1
+    // examples/devportal/box_storage/contract.algo.ts:245
+    // public boxMapStructExists(key: uint64): boolean {
+    bytec 6 // 0x00
+    intc_2 // 0
+    uncover 2
+    setbit
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.nestedStructWrite[routing]() -> void:
+nestedStructWrite:
+    // examples/devportal/box_storage/contract.algo.ts:256
+    // public nestedStructWrite(value: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:261
+    // inner: { c: value + 1, arr: [], d: value + 2 },
+    dup
+    intc_0 // 1
+    +
+    dig 1
+    intc_3 // 2
+    +
+    // examples/devportal/box_storage/contract.algo.ts:263
+    // b: value + 3,
+    dig 2
+    pushint 3
+    +
+    // examples/devportal/box_storage/contract.algo.ts:259-264
+    // this.boxNested.value = {
+    //   a: value,
+    //   inner: { c: value + 1, arr: [], d: value + 2 },
+    //   siblings: [],
+    //   b: value + 3,
+    // }
+    uncover 2
+    itob
+    pushbytes 0x0012
+    concat
+    uncover 2
+    itob
+    concat
+    // examples/devportal/box_storage/contract.algo.ts:261
+    // inner: { c: value + 1, arr: [], d: value + 2 },
+    bytec 16 // 0x0000
+    // examples/devportal/box_storage/contract.algo.ts:259-264
+    // this.boxNested.value = {
+    //   a: value,
+    //   inner: { c: value + 1, arr: [], d: value + 2 },
+    //   siblings: [],
+    //   b: value + 3,
+    // }
+    concat
+    uncover 2
+    itob
+    pushbytes 0x0014
+    concat
+    dig 1
+    len
+    pushint 20
+    +
+    itob
+    extract 6 2
+    concat
+    uncover 2
+    itob
+    concat
+    swap
+    concat
+    // examples/devportal/box_storage/contract.algo.ts:262
+    // siblings: [],
+    bytec 16 // 0x0000
+    // examples/devportal/box_storage/contract.algo.ts:259-264
+    // this.boxNested.value = {
+    //   a: value,
+    //   inner: { c: value + 1, arr: [], d: value + 2 },
+    //   siblings: [],
+    //   b: value + 3,
+    // }
+    concat
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:259-264
+    // this.boxNested.value = {
+    //   a: value,
+    //   inner: { c: value + 1, arr: [], d: value + 2 },
+    //   siblings: [],
+    //   b: value + 3,
+    // }
+    box_del
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:259-264
+    // this.boxNested.value = {
+    //   a: value,
+    //   inner: { c: value + 1, arr: [], d: value + 2 },
+    //   siblings: [],
+    //   b: value + 3,
+    // }
+    swap
+    box_put
+    // examples/devportal/box_storage/contract.algo.ts:265
+    // for (const i of urange(3)) {
+    intc_2 // 0
+
+nestedStructWrite_for_header@2:
+    // examples/devportal/box_storage/contract.algo.ts:265
+    // for (const i of urange(3)) {
+    dup
+    pushint 3
+    <
+    bz nestedStructWrite_after_for@5
+    // examples/devportal/box_storage/contract.algo.ts:266
+    // this.boxNested.value.inner.arr.push(i)
+    dup
+    itob
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:266
+    // this.boxNested.value.inner.arr.push(i)
+    pushint 10
+    intc_3 // 2
+    box_extract
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:266
+    // this.boxNested.value.inner.arr.push(i)
+    intc_1 // 8
+    +
+    itob
+    extract 6 2
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:266
+    // this.boxNested.value.inner.arr.push(i)
+    pushint 10
+    uncover 2
+    box_replace
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:266
+    // this.boxNested.value.inner.arr.push(i)
+    pushint 38
+    intc_3 // 2
+    box_extract
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    box_len
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:266
+    // this.boxNested.value.inner.arr.push(i)
+    intc_1 // 8
+    +
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    swap
+    box_resize
+    dup
+    // examples/devportal/box_storage/contract.algo.ts:266
+    // this.boxNested.value.inner.arr.push(i)
+    intc_0 // 1
+    +
+    itob
+    extract 6 2
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:266
+    // this.boxNested.value.inner.arr.push(i)
+    pushint 38
+    uncover 2
+    box_replace
+    // examples/devportal/box_storage/contract.algo.ts:266
+    // this.boxNested.value.inner.arr.push(i)
+    intc_1 // 8
+    *
+    pushint 40
+    +
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    swap
+    intc_2 // 0
+    uncover 3
+    box_splice
+    // examples/devportal/box_storage/contract.algo.ts:265
+    // for (const i of urange(3)) {
+    intc_0 // 1
+    +
+    b nestedStructWrite_for_header@2
+
+nestedStructWrite_after_for@5:
+    // examples/devportal/box_storage/contract.algo.ts:256
+    // public nestedStructWrite(value: uint64): void {
+    intc_0 // 1
+    return
+
+
+// examples/devportal/box_storage/contract.algo.ts::BoxStorage.nestedStructSum[routing]() -> void:
+nestedStructSum:
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:271
+    // let total: uint64 = this.boxNested.value.a + this.boxNested.value.b
+    intc_2 // 0
+    intc_1 // 8
+    box_extract // on error: index out of bounds
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:271
+    // let total: uint64 = this.boxNested.value.a + this.boxNested.value.b
+    pushint 12
+    intc_1 // 8
+    box_extract // on error: index out of bounds
+    btoi
+    +
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:272
+    // total += this.boxNested.value.inner.c + this.boxNested.value.inner.d
+    pushint 20
+    intc_1 // 8
+    box_extract // on error: index out of bounds
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:272
+    // total += this.boxNested.value.inner.c + this.boxNested.value.inner.d
+    pushint 30
+    intc_1 // 8
+    box_extract // on error: index out of bounds
+    btoi
+    +
+    +
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:273
+    // for (const value of this.boxNested.value.inner.arr) {
+    pushint 38
+    intc_3 // 2
+    box_extract
+    btoi
+    swap
+    intc_2 // 0
+
+nestedStructSum_for_header@2:
+    // examples/devportal/box_storage/contract.algo.ts:273
+    // for (const value of this.boxNested.value.inner.arr) {
+    dup
+    dig 3
+    <
+    bz nestedStructSum_after_for@5
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:273
+    // for (const value of this.boxNested.value.inner.arr) {
+    pushint 38
+    intc_3 // 2
+    box_extract
+    btoi
+    dig 1
+    >
+    assert // index out of bounds
+    dup
+    intc_1 // 8
+    *
+    pushint 40
+    +
+    // examples/devportal/box_storage/contract.algo.ts:44
+    // boxNested = Box<NestedStruct>({ key: 'boxNested' })
+    bytec_0 // "boxNested"
+    // examples/devportal/box_storage/contract.algo.ts:273
+    // for (const value of this.boxNested.value.inner.arr) {
+    swap
+    intc_1 // 8
+    box_extract // on error: index out of bounds
+    btoi
+    // examples/devportal/box_storage/contract.algo.ts:274
+    // total += value
+    uncover 2
+    +
+    swap
+    intc_0 // 1
+    +
+    b nestedStructSum_for_header@2
+
+nestedStructSum_after_for@5:
+    pop
+    // examples/devportal/box_storage/contract.algo.ts:270
+    // public nestedStructSum(): uint64 {
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return

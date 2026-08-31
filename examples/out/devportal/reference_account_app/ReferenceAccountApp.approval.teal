@@ -1,0 +1,87 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 TMPL_KNOWN_APP
+    bytecblock "my_counter" 0x151f7c75 TMPL_KNOWN_ACCOUNT
+    // examples/devportal/reference_account_app/contract.algo.ts:42
+    // export class ReferenceAccountApp extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x87ad70bf 0x605c4419 // method "getMyCounter()uint64", method "getMyCounterWithArg(address,uint64)uint64"
+    txna ApplicationArgs 0
+    match getMyCounter getMyCounterWithArg
+    err
+
+main___algots__.defaultCreate@9:
+    // examples/devportal/reference_account_app/contract.algo.ts:42
+    // export class ReferenceAccountApp extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// examples/devportal/reference_account_app/contract.algo.ts::ReferenceAccountApp.getMyCounter[routing]() -> void:
+getMyCounter:
+    // examples/devportal/reference_account_app/contract.algo.ts:55
+    // const [myCount, exists] = op.AppLocal.getExUint64(account, app, Bytes('my_counter'))
+    bytec_2 // TMPL_KNOWN_ACCOUNT
+    intc_1 // TMPL_KNOWN_APP
+    bytec_0 // "my_counter"
+    app_local_get_ex
+    // examples/devportal/reference_account_app/contract.algo.ts:56
+    // assert(exists, 'my_counter is not set for this account')
+    assert // my_counter is not set for this account
+    // examples/devportal/reference_account_app/contract.algo.ts:43
+    // @abimethod()
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/reference_account_app/contract.algo.ts::ReferenceAccountApp.getMyCounterWithArg[routing]() -> void:
+getMyCounterWithArg:
+    // examples/devportal/reference_account_app/contract.algo.ts:60
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    txna ApplicationArgs 2
+    dup
+    len
+    pushint 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/reference_account_app/contract.algo.ts:63
+    // const [myCount, exists] = op.AppLocal.getExUint64(account, app, Bytes('my_counter'))
+    bytec_0 // "my_counter"
+    app_local_get_ex
+    // examples/devportal/reference_account_app/contract.algo.ts:64
+    // assert(exists, 'my_counter is not set for this account')
+    assert // my_counter is not set for this account
+    // examples/devportal/reference_account_app/contract.algo.ts:60
+    // @abimethod()
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return

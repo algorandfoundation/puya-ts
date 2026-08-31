@@ -1,0 +1,115 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0
+    bytecblock "my_counter"
+    // examples/devportal/reference_account_app/contract.algo.ts:19
+    // export class MyCounter extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@6
+    pushbytess 0x29314d95 0xe6dbed7f // method "optIn()void", method "incrementMyCounter()uint64"
+    txna ApplicationArgs 0
+    match main_optIn_route@3 main_incrementMyCounter_route@4
+    err
+
+main_incrementMyCounter_route@4:
+    // examples/devportal/reference_account_app/contract.algo.ts:27
+    // @abimethod()
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert
+    b incrementMyCounter
+
+main_optIn_route@3:
+    // examples/devportal/reference_account_app/contract.algo.ts:22
+    // @abimethod({ allowActions: 'OptIn' })
+    txn OnCompletion
+    intc_0 // OptIn
+    ==
+    txn ApplicationID
+    &&
+    assert
+    b optIn
+
+main___algots__.defaultCreate@6:
+    // examples/devportal/reference_account_app/contract.algo.ts:19
+    // export class MyCounter extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// examples/devportal/reference_account_app/contract.algo.ts::MyCounter.optIn[routing]() -> void:
+optIn:
+    // examples/devportal/reference_account_app/contract.algo.ts:24
+    // this.myCounter(Txn.sender).value = Uint64(0)
+    txn Sender
+    // examples/devportal/reference_account_app/contract.algo.ts:20
+    // myCounter = LocalState<uint64>({ key: 'my_counter' })
+    bytec_0 // "my_counter"
+    // examples/devportal/reference_account_app/contract.algo.ts:24
+    // this.myCounter(Txn.sender).value = Uint64(0)
+    intc_1 // 0
+    app_local_put
+    // examples/devportal/reference_account_app/contract.algo.ts:22
+    // @abimethod({ allowActions: 'OptIn' })
+    intc_0 // 1
+    return
+
+
+// examples/devportal/reference_account_app/contract.algo.ts::MyCounter.incrementMyCounter[routing]() -> void:
+incrementMyCounter:
+    // examples/devportal/reference_account_app/contract.algo.ts:29
+    // assert(Txn.sender.isOptedIn(Global.currentApplicationId), 'Account is not opted in to the app')
+    txn Sender
+    global CurrentApplicationID
+    app_opted_in
+    assert // Account is not opted in to the app
+    // examples/devportal/reference_account_app/contract.algo.ts:30
+    // this.myCounter(Txn.sender).value += 1
+    txn Sender
+    intc_1 // 0
+    // examples/devportal/reference_account_app/contract.algo.ts:20
+    // myCounter = LocalState<uint64>({ key: 'my_counter' })
+    bytec_0 // "my_counter"
+    // examples/devportal/reference_account_app/contract.algo.ts:30
+    // this.myCounter(Txn.sender).value += 1
+    app_local_get_ex
+    assert // check LocalState exists
+    intc_0 // 1
+    +
+    txn Sender
+    // examples/devportal/reference_account_app/contract.algo.ts:20
+    // myCounter = LocalState<uint64>({ key: 'my_counter' })
+    bytec_0 // "my_counter"
+    // examples/devportal/reference_account_app/contract.algo.ts:30
+    // this.myCounter(Txn.sender).value += 1
+    uncover 2
+    app_local_put
+    // examples/devportal/reference_account_app/contract.algo.ts:31
+    // return this.myCounter(Txn.sender).value
+    txn Sender
+    intc_1 // 0
+    // examples/devportal/reference_account_app/contract.algo.ts:20
+    // myCounter = LocalState<uint64>({ key: 'my_counter' })
+    bytec_0 // "my_counter"
+    // examples/devportal/reference_account_app/contract.algo.ts:31
+    // return this.myCounter(Txn.sender).value
+    app_local_get_ex
+    assert // check LocalState exists
+    // examples/devportal/reference_account_app/contract.algo.ts:27
+    // @abimethod()
+    itob
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return

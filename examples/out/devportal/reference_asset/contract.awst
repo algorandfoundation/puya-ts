@@ -1,0 +1,27 @@
+contract ReferenceAsset
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getAssetTotalSupply(): uint64
+  {
+    return checked_maybe(asset_params_get<AssetTotal>(TemplateVar[asset](TMPL_KNOWN_ASSET)), comment=asset exists)
+  }
+  
+  getAssetTotalSupplyWithArg(asset: asset): uint64
+  {
+    return checked_maybe(asset_params_get<AssetTotal>(asset), comment=asset exists)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

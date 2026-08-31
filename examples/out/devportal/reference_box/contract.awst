@@ -1,0 +1,47 @@
+contract ReferenceBox
+{
+  boxes {
+    ["counter"]: account => uint64
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  incrementBoxCounter(payMbr: group_transaction_pay): uint64
+  {
+    #[counter, exists]: readonly [uint64, bool] = #[($0 = STATE_GET_EX(Box[MapKey(prefix="counter", key=txn<Sender>())].value)).0, $0.1]
+    if (!exists) {
+      assert(gtxns<Amount>(payMbr) >= 21300, comment=Payment must cover the box MBR)
+      assert(gtxns<Receiver>(payMbr) == global<CurrentApplicationAddress>(), comment=Payment must be to the contract)
+    }
+    newCount: uint64 = (exists ? counter + 1 : 1)
+    Box[MapKey(prefix="counter", key=txn<Sender>())].value: uint64 = newCount
+    return newCount
+  }
+  
+  getBoxCounter(): uint64
+  {
+    return STATE_GET(Box[MapKey(prefix="counter", key=txn<Sender>())].value, default=0)
+  }
+  
+  getBoxCounterForAccount(account: account): uint64
+  {
+    return STATE_GET(Box[MapKey(prefix="counter", key=account)].value, default=0)
+  }
+  
+  getBoxMbr(): uint64
+  {
+    return 21300
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

@@ -1,0 +1,27 @@
+contract ReferenceAccount
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getAccountBalance(): uint64
+  {
+    return checked_maybe(acct_params_get<AcctBalance>(TemplateVar[account](TMPL_KNOWN_ACCOUNT)), comment=account funded)
+  }
+  
+  getAccountBalanceWithArg(account: account): uint64
+  {
+    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

@@ -1,0 +1,90 @@
+contract Auction
+{
+  globals {
+    ["previousBidder"]: account
+    ["auctionEnd"]: uint64
+    ["previousBid"]: uint64
+    ["asaAmt"]: uint64
+    ["asa"]: asset
+  }
+  locals {
+    ["claimableAmount"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+    GlobalState["auctionEnd"]: uint64 = 0
+    GlobalState["previousBid"]: uint64 = 0
+    GlobalState["asaAmt"]: uint64 = 0
+    GlobalState["asa"]: asset = reinterpret_cast<asset>(0)
+    GlobalState["previousBidder"]: account = global<ZeroAddress>()
+  }
+  
+  optIntoAsset(asset: asset): void
+  {
+    assert(txn<Sender>() == global<CreatorAddress>(), comment=assert target is match for conditions)
+    assert(GlobalState["asa"] == reinterpret_cast<asset>(0))
+    GlobalState["asa"]: asset = asset
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=global<CurrentApplicationAddress>(), XferAsset=asset, AssetAmount=0))
+  }
+  
+  startAuction(startingPrice: uint64, length: uint64, axfer: group_transaction_axfer): void
+  {
+    assert(txn<Sender>() == global<CreatorAddress>(), comment=assert target is match for conditions)
+    assert(GlobalState["auctionEnd"] == 0)
+    assert(gtxns<AssetReceiver>(axfer) == global<CurrentApplicationAddress>(), comment=assert target is match for conditions)
+    GlobalState["asaAmt"]: uint64 = gtxns<AssetAmount>(axfer)
+    GlobalState["auctionEnd"]: uint64 = global<LatestTimestamp>() + length
+    GlobalState["previousBid"]: uint64 = startingPrice
+  }
+  
+  pay(receiver: account, amount: uint64): void
+  {
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=1, Receiver=receiver, Amount=amount))
+  }
+  
+  optInToApplication(): void
+  {
+  }
+  
+  bid(payment: group_transaction_pay): void
+  {
+    assert(global<LatestTimestamp>() < GlobalState["auctionEnd"])
+    assert(&&(gtxns<Sender>(payment) == txn<Sender>(), gtxns<Amount>(payment) > GlobalState["previousBid"]), comment=assert target is match for conditions)
+    GlobalState["previousBid"]: uint64 = gtxns<Amount>(payment)
+    GlobalState["previousBidder"]: account = gtxns<Sender>(payment)
+    LocalState[txn<Sender>()]["claimableAmount"]: uint64 = gtxns<Amount>(payment)
+  }
+  
+  claimBids(): void
+  {
+    originalAmount: uint64 = LocalState[txn<Sender>()]["claimableAmount"]
+    amount: uint64 = originalAmount
+    if (txn<Sender>() == GlobalState["previousBidder"]) {
+      amount: uint64 = amount - GlobalState["previousBid"]
+    }
+    examples/auction/contract.algo.ts::Auction.pay(txn<Sender>(), amount)
+    LocalState[txn<Sender>()]["claimableAmount"]: uint64 = originalAmount - amount
+  }
+  
+  claimAsset(asset: asset): void
+  {
+    assert(global<LatestTimestamp>() > GlobalState["auctionEnd"])
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=GlobalState["previousBidder"], XferAsset=asset, AssetAmount=GlobalState["asaAmt"], AssetCloseTo=GlobalState["previousBidder"]))
+  }
+  
+  deleteApplication(): void
+  {
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=1, Receiver=global<CreatorAddress>(), CloseRemainderTo=global<CreatorAddress>(), Amount=0))
+  }
+  
+}

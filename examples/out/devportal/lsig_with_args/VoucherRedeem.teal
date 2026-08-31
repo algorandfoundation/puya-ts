@@ -1,0 +1,154 @@
+#pragma version 11
+#pragma typetrack false
+#pragma autosalt true
+
+// examples/devportal/lsig_with_args/contract.algo.ts::program() -> uint64:
+main:
+    // examples/devportal/lsig_with_args/contract.algo.ts:31
+    // program(voucher: Voucher): boolean {
+    arg_0
+    dup
+    len
+    pushint 48
+    ==
+    assert // invalid number of bytes for Voucher
+    // examples/devportal/lsig_with_args/contract.algo.ts:33
+    // Txn.typeEnum === TransactionType.Payment &&
+    txn TypeEnum
+    pushint 1
+    ==
+    // examples/devportal/lsig_with_args/contract.algo.ts:33-34
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === voucher.recipient.native &&
+    bz main_bool_false@9
+    // examples/devportal/lsig_with_args/contract.algo.ts:34
+    // Txn.receiver === voucher.recipient.native &&
+    txn Receiver
+    dig 1
+    extract 0 32
+    ==
+    // examples/devportal/lsig_with_args/contract.algo.ts:33-34
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === voucher.recipient.native &&
+    bz main_bool_false@9
+    // examples/devportal/lsig_with_args/contract.algo.ts:35
+    // Txn.amount <= voucher.maxAmount.asUint64() &&
+    txn Amount
+    dig 1
+    pushint 32
+    extract_uint64
+    <=
+    // examples/devportal/lsig_with_args/contract.algo.ts:33-35
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === voucher.recipient.native &&
+    // Txn.amount <= voucher.maxAmount.asUint64() &&
+    bz main_bool_false@9
+    // examples/devportal/lsig_with_args/contract.algo.ts:37
+    // Txn.lastValid === voucher.expiresAt.asUint64() &&
+    txn LastValid
+    dig 1
+    pushint 40
+    extract_uint64
+    ==
+    // examples/devportal/lsig_with_args/contract.algo.ts:33-37
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === voucher.recipient.native &&
+    // Txn.amount <= voucher.maxAmount.asUint64() &&
+    // // pin the validity window's end to the voucher expiry...
+    // Txn.lastValid === voucher.expiresAt.asUint64() &&
+    bz main_bool_false@9
+    // examples/devportal/lsig_with_args/contract.algo.ts:39
+    // Txn.lease === op.sha256(voucher.bytes) &&
+    txn Lease
+    dig 1
+    sha256
+    ==
+    // examples/devportal/lsig_with_args/contract.algo.ts:33-39
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === voucher.recipient.native &&
+    // Txn.amount <= voucher.maxAmount.asUint64() &&
+    // // pin the validity window's end to the voucher expiry...
+    // Txn.lastValid === voucher.expiresAt.asUint64() &&
+    // // ...and hold the (sender, lease) slot until then: one redemption only
+    // Txn.lease === op.sha256(voucher.bytes) &&
+    bz main_bool_false@9
+    // examples/devportal/lsig_with_args/contract.algo.ts:40
+    // Txn.fee <= Global.minTxnFee &&
+    txn Fee
+    global MinTxnFee
+    <=
+    // examples/devportal/lsig_with_args/contract.algo.ts:33-40
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === voucher.recipient.native &&
+    // Txn.amount <= voucher.maxAmount.asUint64() &&
+    // // pin the validity window's end to the voucher expiry...
+    // Txn.lastValid === voucher.expiresAt.asUint64() &&
+    // // ...and hold the (sender, lease) slot until then: one redemption only
+    // Txn.lease === op.sha256(voucher.bytes) &&
+    // Txn.fee <= Global.minTxnFee &&
+    bz main_bool_false@9
+    // examples/devportal/lsig_with_args/contract.algo.ts:41
+    // Txn.rekeyTo === Global.zeroAddress &&
+    txn RekeyTo
+    global ZeroAddress
+    ==
+    // examples/devportal/lsig_with_args/contract.algo.ts:33-41
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === voucher.recipient.native &&
+    // Txn.amount <= voucher.maxAmount.asUint64() &&
+    // // pin the validity window's end to the voucher expiry...
+    // Txn.lastValid === voucher.expiresAt.asUint64() &&
+    // // ...and hold the (sender, lease) slot until then: one redemption only
+    // Txn.lease === op.sha256(voucher.bytes) &&
+    // Txn.fee <= Global.minTxnFee &&
+    // Txn.rekeyTo === Global.zeroAddress &&
+    bz main_bool_false@9
+    // examples/devportal/lsig_with_args/contract.algo.ts:42
+    // Txn.closeRemainderTo === Global.zeroAddress
+    txn CloseRemainderTo
+    global ZeroAddress
+    ==
+    // examples/devportal/lsig_with_args/contract.algo.ts:33-42
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === voucher.recipient.native &&
+    // Txn.amount <= voucher.maxAmount.asUint64() &&
+    // // pin the validity window's end to the voucher expiry...
+    // Txn.lastValid === voucher.expiresAt.asUint64() &&
+    // // ...and hold the (sender, lease) slot until then: one redemption only
+    // Txn.lease === op.sha256(voucher.bytes) &&
+    // Txn.fee <= Global.minTxnFee &&
+    // Txn.rekeyTo === Global.zeroAddress &&
+    // Txn.closeRemainderTo === Global.zeroAddress
+    bz main_bool_false@9
+    pushint 1
+    // examples/devportal/lsig_with_args/contract.algo.ts:32-43
+    // return (
+    //   Txn.typeEnum === TransactionType.Payment &&
+    //   Txn.receiver === voucher.recipient.native &&
+    //   Txn.amount <= voucher.maxAmount.asUint64() &&
+    //   // pin the validity window's end to the voucher expiry...
+    //   Txn.lastValid === voucher.expiresAt.asUint64() &&
+    //   // ...and hold the (sender, lease) slot until then: one redemption only
+    //   Txn.lease === op.sha256(voucher.bytes) &&
+    //   Txn.fee <= Global.minTxnFee &&
+    //   Txn.rekeyTo === Global.zeroAddress &&
+    //   Txn.closeRemainderTo === Global.zeroAddress
+    // )
+    return
+
+main_bool_false@9:
+    pushint 0
+    // examples/devportal/lsig_with_args/contract.algo.ts:32-43
+    // return (
+    //   Txn.typeEnum === TransactionType.Payment &&
+    //   Txn.receiver === voucher.recipient.native &&
+    //   Txn.amount <= voucher.maxAmount.asUint64() &&
+    //   // pin the validity window's end to the voucher expiry...
+    //   Txn.lastValid === voucher.expiresAt.asUint64() &&
+    //   // ...and hold the (sender, lease) slot until then: one redemption only
+    //   Txn.lease === op.sha256(voucher.bytes) &&
+    //   Txn.fee <= Global.minTxnFee &&
+    //   Txn.rekeyTo === Global.zeroAddress &&
+    //   Txn.closeRemainderTo === Global.zeroAddress
+    // )
+    return

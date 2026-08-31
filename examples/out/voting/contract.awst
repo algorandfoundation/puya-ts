@@ -1,0 +1,186 @@
+contract VotingRoundApp
+{
+  globals {
+    ["isBootstrapped"]: bool
+    ["voterCount"]: uint64
+    ["closeTime"]: uint64
+    ["voteId"]: string
+    ["snapshotPublicKey"]: bytes[32]
+    ["metadataIpfsCid"]: string
+    ["startTime"]: uint64
+    ["nftImageUrl"]: string
+    ["endTime"]: uint64
+    ["quorum"]: uint64
+    ["optionCounts"]: arc4.dynamic_array<arc4.uint8>
+    ["totalOptions"]: uint64
+    ["nftAsset"]: asset
+  }
+  boxes {
+    ["V"]: bytes
+    [0x]: account => arc4.dynamic_array<arc4.uint8>
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  create(voteId: string, snapshotPublicKey: bytes[32], metadataIpfsCid: string, startTime: uint64, endTime: uint64, optionCounts: arc4.dynamic_array<arc4.uint8>, quorum: uint64, nftImageUrl: string): void
+  {
+    assert(startTime < endTime, comment=End time should be after start time)
+    assert(endTime >= global<LatestTimestamp>(), comment=End time should be in the future)
+    GlobalState["voteId"]: string = voteId
+    GlobalState["snapshotPublicKey"]: bytes[32] = snapshotPublicKey
+    GlobalState["metadataIpfsCid"]: string = metadataIpfsCid
+    GlobalState["startTime"]: uint64 = startTime
+    GlobalState["endTime"]: uint64 = endTime
+    GlobalState["quorum"]: uint64 = quorum
+    GlobalState["nftImageUrl"]: string = nftImageUrl
+    examples/voting/contract.algo.ts::VotingRoundApp.storeOptionCounts(optionCounts)
+  }
+  
+  bootstrap(fundMinBalReq: group_transaction_pay): void
+  {
+    assert(!GlobalState["isBootstrapped"], comment=Must not be already bootstrapped)
+    GlobalState["isBootstrapped"]: bool = True
+    assert(gtxns<Receiver>(fundMinBalReq) == global<CurrentApplicationAddress>(), comment=Payment must be to app address)
+    tallyBoxSize: uint64 = GlobalState["totalOptions"] * 8
+    minBalanceReq: uint64 = 203900 + tallyBoxSize * 400
+    log(itob(minBalanceReq))
+    assert(gtxns<Amount>(fundMinBalReq) == minBalanceReq, comment=Payment must be for the exact min balance requirement)
+    assert(box_create("V", tallyBoxSize))
+  }
+  
+  close(): void
+  {
+    ensure_budget(20000, 0)
+    assert(!STATE_EXISTS(GlobalState["closeTime"]), comment=Already closed)
+    GlobalState["closeTime"]: uint64 = global<LatestTimestamp>()
+    note: string = "{
+      "standard":"arc69",
+      "description":"This is a voting result NFT for voting round with ID " + GlobalState["voteId"] + "",
+      "properties":{
+        "metadata":"ipfs://" + GlobalState["metadataIpfsCid"] + "",
+        "id":"" + GlobalState["voteId"] + "",
+        "quorum":"" + examples/voting/contract.algo.ts::itoa(GlobalState["quorum"]) + "}",
+        "voterCount":"" + examples/voting/contract.algo.ts::itoa(GlobalState["voterCount"]) + "",
+        "tallies": ["
+    currentIndex: uint64 = 0
+    for (temp in enumerate(GlobalState["optionCounts"])) {
+      #[questionIndex, questionOptions]: readonly [uint64, arc4.uint8] = #[($0 = copy(temp)).0, $0.1]
+      if (questionIndex > 0) {
+        note: string = concat(note, ",")
+      }
+      if (ARC4_DECODE(questionOptions) > 0) {
+        note: string = concat(note, "[")
+        optionIndex: uint64 = 0
+        while (optionIndex <= ARC4_DECODE(questionOptions)) {
+          if (optionIndex > 0) {
+            note: string = concat(note, ",")
+          }
+          note: string = concat(note, examples/voting/contract.algo.ts::itoa(examples/voting/contract.algo.ts::VotingRoundApp.getVoteFromBox(currentIndex)))
+          currentIndex: uint64 = currentIndex + 1
+          optionIndex++
+        }
+        note: string = concat(note, "]")
+      }
+    }
+    note: string = concat(note, "]}}")
+    GlobalState["nftAsset"]: asset = submit_txn(create_inner_transaction(Fee=global<MinTxnFee>(), TypeEnum=3, ConfigAssetTotal=1, ConfigAssetDecimals=0, ConfigAssetDefaultFrozen=False, ConfigAssetName=reinterpret_cast<bytes>("[VOTE RESULT] " + GlobalState["voteId"]), ConfigAssetUnitName="VOTERSLT", ConfigAssetURL=reinterpret_cast<bytes>(GlobalState["nftImageUrl"]), Note=reinterpret_cast<bytes>(note))).ConfigAsset
+  }
+  
+  getPreconditions(signature: bytes[64]): examples/voting/contract.algo.ts::VotingPreconditions
+  {
+    return new examples/voting/contract.algo.ts::VotingPreconditions(is_voting_open=($1 = #{ is_voting_open: ($2 = #[reinterpret_cast<uint64>(examples/voting/contract.algo.ts::VotingRoundApp.allowedToVote(signature)), reinterpret_cast<uint64>(examples/voting/contract.algo.ts::VotingRoundApp.votingOpen()), reinterpret_cast<uint64>(examples/voting/contract.algo.ts::VotingRoundApp.alreadyVoted()), global<LatestTimestamp>()]).1, is_allowed_to_vote: $2.0, has_already_voted: $2.2, current_time: $2.3 }).is_voting_open, is_allowed_to_vote=$1.is_allowed_to_vote, has_already_voted=$1.has_already_voted, current_time=$1.current_time)
+  }
+  
+  allowedToVote(signature: bytes[64]): bool
+  {
+    ensure_budget(2000, 0)
+    return ed25519verify_bare(reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(txn<Sender>())), signature, GlobalState["snapshotPublicKey"])
+  }
+  
+  alreadyVoted(): bool
+  {
+    return STATE_EXISTS(Box[MapKey(prefix=0x, key=txn<Sender>())].value)
+  }
+  
+  vote(fundMinBalReq: group_transaction_pay, signature: bytes[64], answerIds: arc4.dynamic_array<arc4.uint8>): void
+  {
+    ensure_budget(7700, 0)
+    assert(examples/voting/contract.algo.ts::VotingRoundApp.allowedToVote(signature), comment=Not allowed to vote)
+    assert(examples/voting/contract.algo.ts::VotingRoundApp.votingOpen(), comment=Voting not open)
+    assert(!examples/voting/contract.algo.ts::VotingRoundApp.alreadyVoted(), comment=Already voted)
+    questionsCount: uint64 = GlobalState["optionCounts"].length
+    assert(answerIds.length == questionsCount, comment=Number of answers incorrect)
+    minBalReq: uint64 = 2500 + 34 + 1 * answerIds.length * 400
+    log(itob(minBalReq))
+    assert(&&(gtxns<Receiver>(fundMinBalReq) == global<CurrentApplicationAddress>(), gtxns<Amount>(fundMinBalReq) == minBalReq), comment=Payment must be to app and for exactly min balance)
+    cumulativeOffset: uint64 = 0
+    for (temp in urange(0, questionsCount, 1)) {
+      questionIndex: uint64 = copy(temp)
+      answerOptionIndex: uint64 = ARC4_DECODE(answerIds[questionIndex])
+      optionsCount: uint64 = ARC4_DECODE(GlobalState["optionCounts"][questionIndex])
+      assert(answerOptionIndex < optionsCount, comment=Answer option index invalid)
+      examples/voting/contract.algo.ts::VotingRoundApp.incrementVoteInBox(cumulativeOffset + answerOptionIndex)
+      cumulativeOffset: uint64 = cumulativeOffset + optionsCount
+      Box[MapKey(prefix=0x, key=txn<Sender>())].value: arc4.dynamic_array<arc4.uint8> = copy(answerIds)
+      GlobalState["voterCount"]: uint64 = GlobalState["voterCount"] + 1
+    }
+  }
+  
+  votingOpen(): bool
+  {
+    return GlobalState["isBootstrapped"] and !STATE_EXISTS(GlobalState["closeTime"]) and GlobalState["startTime"] <= global<LatestTimestamp>() and global<LatestTimestamp>() <= GlobalState["endTime"]
+  }
+  
+  storeOptionCounts(optionCounts: arc4.dynamic_array<arc4.uint8>): void
+  {
+    assert(&&(optionCounts.length <= ($3 = #[1, 112]).1, optionCounts.length >= $3.0), comment=assert target is match for conditions)
+    totalOptions: uint64 = 0
+    for (temp in optionCounts) {
+      item: arc4.uint8 = copy(temp)
+      totalOptions: uint64 = totalOptions + ARC4_DECODE(item)
+    }
+    GlobalState["optionCounts"]: arc4.dynamic_array<arc4.uint8> = copy(optionCounts)
+    GlobalState["totalOptions"]: uint64 = totalOptions
+  }
+  
+  getVoteFromBox(index: uint64): uint64
+  {
+    return btoi(box_extract("V", index, 8))
+  }
+  
+  incrementVoteInBox(index: uint64): void
+  {
+    currentVote: uint64 = examples/voting/contract.algo.ts::VotingRoundApp.getVoteFromBox(index)
+    box_replace("V", index, reinterpret_cast<bytes>(itob(currentVote + 1)))
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["isBootstrapped"]: bool = False
+    GlobalState["voterCount"]: uint64 = 0
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+subroutine itoa(i: uint64): string
+{
+  radix: uint64 = len("0123456789")
+  if (i < radix) {
+    return reinterpret_cast<string>("0123456789"[i])
+  }
+  return "" + examples/voting/contract.algo.ts::itoa(i // radix) + reinterpret_cast<string>("0123456789"[i % radix])
+}

@@ -1,0 +1,358 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 2 0 1
+    // examples/devportal/arc4_types/contract.algo.ts:117
+    // export class Arc4DynamicArray extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@10
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x8ad12a2b 0x02bece11 0x8c1a27aa // method "goodbye(string)string[]", method "hello(string)string", method "arc4DynamicBytes()byte[]"
+    txna ApplicationArgs 0
+    match goodbye hello main_arc4DynamicBytes_route@6
+    err
+
+main_arc4DynamicBytes_route@6:
+    // examples/devportal/arc4_types/contract.algo.ts:151
+    // @abimethod()
+    pushbytes 0x151f7c750006ffffffaabbcc
+    log
+    intc_2 // 1
+    return
+
+main___algots__.defaultCreate@10:
+    // examples/devportal/arc4_types/contract.algo.ts:117
+    // export class Arc4DynamicArray extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// _puya_lib.arc4.dynamic_array_pop_byte_length_head(array: bytes) -> bytes:
+dynamic_array_pop_byte_length_head:
+    proto 1 1
+    frame_dig -1
+    intc_1 // 0
+    extract_uint16
+    intc_2 // 1
+    -
+    dup
+    itob
+    extract 6 0
+    frame_dig -1
+    extract 2 0
+    dig 2
+    intc_0 // 2
+    *
+    dup2
+    extract_uint16
+    dig 2
+    intc_1 // 0
+    dig 3
+    substring3
+    uncover 2
+    intc_0 // 2
+    +
+    uncover 3
+    swap
+    uncover 3
+    substring3
+    concat
+    uncover 2
+    intc_1 // 0
+    callsub _recalculate_head_for_elements_with_byte_length_head
+    concat
+    retsub
+
+
+// _puya_lib.arc4.dynamic_array_read_byte_length_element(array: bytes, index: uint64) -> bytes:
+dynamic_array_read_byte_length_element:
+    proto 2 1
+    frame_dig -2
+    extract 2 0
+    frame_dig -1
+    intc_0 // 2
+    *
+    dig 1
+    swap
+    extract_uint16
+    dup2
+    extract_uint16
+    intc_0 // 2
+    +
+    extract3
+    retsub
+
+
+// _puya_lib.arc4.dynamic_array_concat_byte_length_head(array: bytes, new_items_bytes: bytes, new_items_count: uint64) -> bytes:
+dynamic_array_concat_byte_length_head:
+    proto 3 1
+    frame_dig -3
+    intc_1 // 0
+    extract_uint16
+    dup
+    intc_0 // 2
+    *
+    intc_0 // 2
+    +
+    frame_dig -3
+    intc_0 // 2
+    dig 2
+    substring3
+    frame_dig -1
+    intc_0 // 2
+    *
+    bzero
+    concat
+    frame_dig -3
+    len
+    frame_dig -3
+    uncover 3
+    uncover 2
+    substring3
+    frame_dig -2
+    concat
+    concat
+    swap
+    frame_dig -1
+    +
+    dup
+    itob
+    extract 6 0
+    cover 2
+    intc_1 // 0
+    callsub _recalculate_head_for_elements_with_byte_length_head
+    concat
+    retsub
+
+
+// _puya_lib.arc4._recalculate_head_for_elements_with_byte_length_head(array_head_and_tail: bytes, length: uint64, start_at_index: uint64) -> bytes:
+_recalculate_head_for_elements_with_byte_length_head:
+    proto 3 1
+    frame_dig -2
+    intc_0 // 2
+    *
+    dup
+    frame_dig -1
+    intc_0 // 2
+    *
+    frame_dig -3
+    dig 1
+    extract_uint16
+    uncover 2
+    swap
+    frame_dig -1
+    select
+    swap
+
+_recalculate_head_for_elements_with_byte_length_head_for_header@1:
+    dup
+    dig 3
+    <
+    bz _recalculate_head_for_elements_with_byte_length_head_after_for@4
+    swap
+    dup
+    itob
+    extract 6 0
+    frame_dig -3
+    dig 3
+    uncover 2
+    replace3
+    dup
+    frame_bury -3
+    dig 1
+    extract_uint16
+    intc_0 // 2
+    +
+    +
+    swap
+    intc_0 // 2
+    +
+    b _recalculate_head_for_elements_with_byte_length_head_for_header@1
+
+_recalculate_head_for_elements_with_byte_length_head_after_for@4:
+    frame_dig -3
+    frame_bury 0
+    retsub
+
+
+// examples/devportal/arc4_types/contract.algo.ts::Arc4DynamicArray.goodbye[routing]() -> void:
+goodbye:
+    // examples/devportal/arc4_types/contract.algo.ts:118
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    pushbytes 0x151f7c7500020004000f0009476f6f642062796520
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// examples/devportal/arc4_types/contract.algo.ts::Arc4DynamicArray.hello[routing]() -> void:
+hello:
+    // examples/devportal/arc4_types/contract.algo.ts:123
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 2
+    +
+    dig 1
+    len
+    dup
+    uncover 2
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    // examples/devportal/arc4_types/contract.algo.ts:129
+    // const extension = new arc4.DynamicArray(name, new arc4.Str('!'))
+    pushint 4
+    +
+    itob
+    extract 6 2
+    pushbytes 0x00020004
+    swap
+    concat
+    dig 1
+    concat
+    pushbytes 0x000121
+    concat
+    // examples/devportal/arc4_types/contract.algo.ts:130
+    // dynamicStringArray = dynamicStringArray.concat(extension)
+    dup
+    extract 2 0
+    swap
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    dup
+    intc_0 // 2
+    *
+    dig 2
+    len
+    uncover 3
+    cover 2
+    substring3
+    // examples/devportal/arc4_types/contract.algo.ts:127
+    // let dynamicStringArray = new arc4.DynamicArray(new arc4.Str('Hello '))
+    pushbytes 0x00010002000648656c6c6f20
+    // examples/devportal/arc4_types/contract.algo.ts:130
+    // dynamicStringArray = dynamicStringArray.concat(extension)
+    swap
+    uncover 2
+    callsub dynamic_array_concat_byte_length_head
+    dup
+    cover 2
+    // examples/devportal/arc4_types/contract.algo.ts:134
+    // const last = copied.pop()
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    dup
+    cover 3
+    intc_2 // 1
+    - // on error: cannot pop from empty array
+    dig 1
+    swap
+    callsub dynamic_array_read_byte_length_element
+    swap
+    callsub dynamic_array_pop_byte_length_head
+    // examples/devportal/arc4_types/contract.algo.ts:135
+    // assert(last.native === '!', 'last element should be the exclamation mark')
+    swap
+    extract 2 0
+    pushbytes "!"
+    ==
+    assert // last element should be the exclamation mark
+    // examples/devportal/arc4_types/contract.algo.ts:136
+    // const secondLast = copied.pop()
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 1
+    - // on error: cannot pop from empty array
+    dig 1
+    swap
+    callsub dynamic_array_read_byte_length_element
+    swap
+    callsub dynamic_array_pop_byte_length_head
+    // examples/devportal/arc4_types/contract.algo.ts:137
+    // assert(secondLast.native === name.native, 'second last element should be the name')
+    swap
+    extract 2 0
+    uncover 2
+    extract 2 0
+    ==
+    assert // second last element should be the name
+    // examples/devportal/arc4_types/contract.algo.ts:138
+    // copied.push(new arc4.Str('world!'))
+    pushbytes 0x0006776f726c6421
+    intc_2 // 1
+    callsub dynamic_array_concat_byte_length_head
+    // examples/devportal/arc4_types/contract.algo.ts:139
+    // assert(copied.length === 2, "copied is now ['Hello ', 'world!']")
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 2
+    ==
+    assert // copied is now ['Hello ', 'world!']
+    // examples/devportal/arc4_types/contract.algo.ts:141
+    // let greeting = ''
+    pushbytes ""
+    intc_1 // 0
+
+hello_for_header@2:
+    // examples/devportal/arc4_types/contract.algo.ts:142
+    // for (const x of dynamicStringArray) {
+    dup
+    dig 3
+    <
+    bz hello_after_for@5
+    dig 3
+    dig 1
+    callsub dynamic_array_read_byte_length_element
+    // examples/devportal/arc4_types/contract.algo.ts:143
+    // greeting += x.native
+    extract 2 0
+    uncover 2
+    swap
+    concat
+    swap
+    intc_2 // 1
+    +
+    b hello_for_header@2
+
+hello_after_for@5:
+    pop
+    // examples/devportal/arc4_types/contract.algo.ts:123
+    // @abimethod()
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return

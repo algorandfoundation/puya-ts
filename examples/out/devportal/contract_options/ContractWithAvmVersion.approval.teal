@@ -1,0 +1,51 @@
+#pragma version 12
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // examples/devportal/contract_options/contract.algo.ts:83-84
+    // @contract({ avmVersion: 12 })
+    // export class ContractWithAvmVersion extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0x6e082db5 // method "callerPin()uint64"
+    txna ApplicationArgs 0
+    match main_callerPin_route@3
+    err
+
+main_callerPin_route@3:
+    // examples/devportal/contract_options/contract.algo.ts:85
+    // @abimethod()
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert
+    b callerPin
+
+main___algots__.defaultCreate@5:
+    // examples/devportal/contract_options/contract.algo.ts:83-84
+    // @contract({ avmVersion: 12 })
+    // export class ContractWithAvmVersion extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// examples/devportal/contract_options/contract.algo.ts::ContractWithAvmVersion.callerPin[routing]() -> void:
+callerPin:
+    // examples/devportal/contract_options/contract.algo.ts:90
+    // return Txn.rejectVersion
+    txn RejectVersion
+    // examples/devportal/contract_options/contract.algo.ts:85
+    // @abimethod()
+    itob
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    pushint 1
+    return

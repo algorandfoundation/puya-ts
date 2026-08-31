@@ -1,0 +1,290 @@
+contract Arc4Types
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  addArc4Uint64(a: arc4.uint64, b: arc4.uint64): arc4.uint64
+  {
+    c: uint64 = ARC4_DECODE(a) + ARC4_DECODE(b)
+    return ARC4_ENCODE(c, wtype=arc4.uint64)
+  }
+  
+  addArc4UintN(a: arc4.uint8, b: arc4.uint16, c: arc4.uint32, d: arc4.uint64): arc4.uint64
+  {
+    assert(len(reinterpret_cast<bytes>(a)) == 1, comment=Uint8 is encoded in 1 byte)
+    assert(len(reinterpret_cast<bytes>(b)) == 2, comment=Uint16 is encoded in 2 bytes)
+    assert(len(reinterpret_cast<bytes>(c)) == 4, comment=Uint32 is encoded in 4 bytes)
+    assert(len(reinterpret_cast<bytes>(d)) == 8, comment=Uint64 is encoded in 8 bytes)
+    total: uint64 = ARC4_DECODE(a) + ARC4_DECODE(b) + ARC4_DECODE(c) + ARC4_DECODE(d)
+    return ARC4_ENCODE(total, wtype=arc4.uint64)
+  }
+  
+  addArc4BiguintN(a: arc4.uint128, b: arc4.uint256, c: arc4.uint512): arc4.uint512
+  {
+    assert(len(reinterpret_cast<bytes>(a)) == 16, comment=Uint128 is encoded in 16 bytes)
+    assert(len(reinterpret_cast<bytes>(b)) == 32, comment=Uint256 is encoded in 32 bytes)
+    assert(len(reinterpret_cast<bytes>(c)) == 64, comment=Uint512 is encoded in 64 bytes)
+    total: biguint = ARC4_DECODE(a) + ARC4_DECODE(b) + ARC4_DECODE(c)
+    return ARC4_ENCODE(total, wtype=arc4.uint512)
+  }
+  
+  arc4Byte(a: arc4.byte): arc4.byte
+  {
+    return ARC4_ENCODE(ARC4_DECODE(a) + 1, wtype=arc4.byte)
+  }
+  
+  arc4AddressBalance(address: arc4.static_array<arc4.byte,32>): uint64
+  {
+    _underlyingBytes: bytes = reinterpret_cast<bytes>(address)
+    account: account = ARC4_DECODE(address)
+    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
+  }
+  
+  arc4AddressRoundtrip(address: arc4.static_array<arc4.byte,32>): arc4.static_array<arc4.byte,32>
+  {
+    convertedAddress: arc4.static_array<arc4.byte,32> = reinterpret_cast<arc4.static_array<arc4.byte,32>>(ARC4_DECODE(address))
+    assert(reinterpret_cast<bytes>(convertedAddress) == reinterpret_cast<bytes>(address), comment=roundtrip mismatch)
+    return convertedAddress
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract Arc4StaticArray
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  arc4StaticArray(): void
+  {
+    staticUint32Array: arc4.static_array<arc4.uint32,4> = new arc4.static_array<arc4.uint32,4>(1, 10, 2048, 128)
+    total: uint64 = 0
+    for (temp in staticUint32Array) {
+      item: arc4.uint32 = copy(temp)
+      total: uint64 = total + ARC4_DECODE(item)
+    }
+    assert(total == 2187, comment=unexpected static-array total)
+    aliasedStatic: arc4.static_array<arc4.uint8,1> = new arc4.static_array<arc4.uint8,1>(101)
+    assert(ARC4_DECODE(aliasedStatic[0]) + ARC4_DECODE(aliasedStatic[0]) == 202, comment=alias indexing mismatch)
+    aliasedStatic[0]: arc4.uint8 = 202
+    assert(ARC4_DECODE(aliasedStatic[0]) == 202, comment=alias mutation mismatch)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract Arc4DynamicArray
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  goodbye(name: arc4.dynamic_array<arc4.byte>): arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>
+  {
+    return new arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>("Good bye ", name)
+  }
+  
+  hello(name: arc4.dynamic_array<arc4.byte>): string
+  {
+    dynamicStringArray: arc4.dynamic_array<arc4.dynamic_array<arc4.byte>> = new arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>("Hello ")
+    extension: arc4.dynamic_array<arc4.dynamic_array<arc4.byte>> = new arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>(name, "!")
+    dynamicStringArray: arc4.dynamic_array<arc4.dynamic_array<arc4.byte>> = dynamicStringArray.concat(extension)
+    copied: arc4.dynamic_array<arc4.dynamic_array<arc4.byte>> = copy(dynamicStringArray)
+    last: arc4.dynamic_array<arc4.byte> = copied.pop()
+    assert(ARC4_DECODE(last) == "!", comment=last element should be the exclamation mark)
+    secondLast: arc4.dynamic_array<arc4.byte> = copied.pop()
+    assert(ARC4_DECODE(secondLast) == ARC4_DECODE(name), comment=second last element should be the name)
+    copied.push(...#["world!"])
+    assert(copied.length == 2, comment=copied is now ['Hello ', 'world!'])
+    greeting: string = ""
+    for (temp in dynamicStringArray) {
+      x: arc4.dynamic_array<arc4.byte> = copy(temp)
+      greeting: string = concat(greeting, ARC4_DECODE(x))
+    }
+    return greeting
+  }
+  
+  arc4DynamicBytes(): arc4.dynamic_array<arc4.byte>
+  {
+    nativeDynamicBytes: bytes = ARC4_DECODE(0x0003ffffff)
+    assert(len(nativeDynamicBytes) == 3, comment=three bytes before concatenation)
+    extended: arc4.dynamic_array<arc4.byte> = 0x0003ffffff.concat(0x0003aabbcc)
+    assert(len(ARC4_DECODE(extended)) == 6, comment=six bytes after concatenation)
+    return extended
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract Arc4Struct
+{
+  globals {
+    ["todos"]: arc4.dynamic_array<Todo>
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  addTodo(task: arc4.dynamic_array<arc4.byte>): arc4.dynamic_array<Todo>
+  {
+    todos: arc4.dynamic_array<Todo> = copy(GlobalState["todos"])
+    todo: Todo = new Todo(task=($0 = #{ task: task, completed: False }).task, completed=$0.completed)
+    todos.push(...#[copy(todo)])
+    GlobalState["todos"]: arc4.dynamic_array<Todo> = copy(todos)
+    return todos
+  }
+  
+  completeTodo(task: arc4.dynamic_array<arc4.byte>): void
+  {
+    todos: arc4.dynamic_array<Todo> = copy(GlobalState["todos"])
+    for (temp in urange(0, todos.length, 1)) {
+      index: uint64 = copy(temp)
+      if (reinterpret_cast<bytes>(todos[index].task) == reinterpret_cast<bytes>(task)) {
+        todos[index].completed: arc4.bool = True
+        GlobalState["todos"]: arc4.dynamic_array<Todo> = copy(todos)
+        return 
+      }
+    }
+  }
+  
+  returnTodo(task: arc4.dynamic_array<arc4.byte>): Todo
+  {
+    todos: arc4.dynamic_array<Todo> = copy(GlobalState["todos"])
+    for (temp in urange(0, todos.length, 1)) {
+      index: uint64 = copy(temp)
+      if (reinterpret_cast<bytes>(todos[index].task) == reinterpret_cast<bytes>(task)) {
+        return copy(todos[index])
+      }
+    }
+    err(todo not found)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["todos"]: arc4.dynamic_array<Todo> = new arc4.dynamic_array<Todo>()
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract Arc4Tuple
+{
+  globals {
+    ["contactInfo"]: arc4.tuple<arc4.dynamic_array<arc4.byte>,arc4.dynamic_array<arc4.byte>,arc4.uint64>
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  addContactInfo(contact: arc4.tuple<arc4.dynamic_array<arc4.byte>,arc4.dynamic_array<arc4.byte>,arc4.uint64>): uint64
+  {
+    #[name, email, phone]: readonly [arc4.dynamic_array<arc4.byte>, arc4.dynamic_array<arc4.byte>, arc4.uint64] = #[($1 = ARC4_DECODE(contact)).0, $1.1, $1.2]
+    assert(ARC4_DECODE(name) == "Alice", comment=unexpected name)
+    assert(ARC4_DECODE(email) == "alice@something.com", comment=unexpected email)
+    assert(ARC4_DECODE(phone) == 555555555, comment=unexpected phone)
+    GlobalState["contactInfo"]: arc4.tuple<arc4.dynamic_array<arc4.byte>,arc4.dynamic_array<arc4.byte>,arc4.uint64> = copy(contact)
+    return ARC4_DECODE(phone)
+  }
+  
+  returnContact(): arc4.tuple<arc4.dynamic_array<arc4.byte>,arc4.dynamic_array<arc4.byte>,arc4.uint64>
+  {
+    return GlobalState["contactInfo"]
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["contactInfo"]: arc4.tuple<arc4.dynamic_array<arc4.byte>,arc4.dynamic_array<arc4.byte>,arc4.uint64> = ARC4_ENCODE(#["", "", 0], wtype=arc4.tuple<arc4.dynamic_array<arc4.byte>,arc4.dynamic_array<arc4.byte>,arc4.uint64>)
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract Arc4Codec
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  encodeDecode(value: uint64): uint64
+  {
+    encoded: bytes = ARC4_ENCODE(value, wtype=bytes)
+    assert(len(encoded) == 8, comment=uint64 encodes to 8 big-endian bytes)
+    decoded: uint64 = ARC4_FROM_BYTES(encoded, wtype=uint64, validate=false)
+    assert(decoded == value, comment=round-trip through bytes preserves the value)
+    return decoded
+  }
+  
+  decodeUnvalidated(raw: bytes): arc4.uint64
+  {
+    return ARC4_FROM_BYTES(raw, wtype=arc4.uint64, validate=false)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

@@ -1,0 +1,6 @@
+
+logicsig examples/devportal/subsidize_app_call/contract.algo.ts::SubsidizeAppCall {
+  previousAppCall: group_transaction_appl = group_transaction(index=txn<GroupIndex>() - 1, type=group_transaction_appl)
+  currentTxn: group_transaction_pay = group_transaction(index=txn<GroupIndex>(), type=group_transaction_pay)
+  return gtxns<Receiver>(currentTxn) == gtxns<Sender>(currentTxn) and gtxns<Amount>(currentTxn) == 0 and gtxns<RekeyTo>(currentTxn) == global<ZeroAddress>() and gtxns<CloseRemainderTo>(currentTxn) == global<ZeroAddress>() and gtxns<Fee>(currentTxn) == 2 * global<MinTxnFee>() and gtxns<LastValid>(currentTxn) <= TemplateVar[uint64](TMPL_EXPIRATION_ROUND) and reinterpret_cast<bytes>(global<GenesisHash>()) == TemplateVar[bytes](TMPL_TARGET_NETWORK_GENESIS) and reinterpret_cast<uint64>(gtxns<ApplicationID>(previousAppCall)) == TemplateVar[uint64](TMPL_KNOWN_APP) and gtxns<Fee>(previousAppCall) == 0
+}

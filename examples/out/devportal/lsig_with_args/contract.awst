@@ -1,0 +1,26 @@
+
+logicsig examples/devportal/lsig_with_args/contract.algo.ts::EscrowRelease {
+  return txn<TypeEnum>() == reinterpret_cast<uint64>(1) and txn<Receiver>() == ARC4_DECODE(TemplateVar[arc4.static_array<arc4.byte,32>](TMPL_BENEFICIARY)) and txn<Amount>() == amount and txn<Fee>() <= global<MinTxnFee>() and txn<RekeyTo>() == global<ZeroAddress>() and txn<CloseRemainderTo>() == global<ZeroAddress>()
+}
+
+logicsig examples/devportal/lsig_with_args/contract.algo.ts::VoucherRedeem {
+  return txn<TypeEnum>() == reinterpret_cast<uint64>(1) and txn<Receiver>() == ARC4_DECODE(voucher.recipient) and txn<Amount>() <= ARC4_DECODE(voucher.maxAmount) and txn<LastValid>() == ARC4_DECODE(voucher.expiresAt) and txn<Lease>() == sha256(reinterpret_cast<bytes>(voucher)) and txn<Fee>() <= global<MinTxnFee>() and txn<RekeyTo>() == global<ZeroAddress>() and txn<CloseRemainderTo>() == global<ZeroAddress>()
+}
+
+logicsig examples/devportal/lsig_with_args/contract.algo.ts::MixedArgs {
+  assert(txn<TypeEnum>() == reinterpret_cast<uint64>(1), comment=must be a payment)
+  assert(txn<Receiver>() == ARC4_DECODE(recipient), comment=wrong recipient)
+  assert(txn<Amount>() >= amount, comment=amount too small)
+  assert(txn<Note>() == ARC4_DECODE(note), comment=wrong note)
+  assert(txn<Fee>() <= global<MinTxnFee>(), comment=fee too high)
+  assert(txn<RekeyTo>() == global<ZeroAddress>(), comment=rekey not allowed)
+  assert(txn<CloseRemainderTo>() == global<ZeroAddress>(), comment=close not allowed)
+  digest: bytes[32] = sha256(concat(concat(args(0), args(1)), args(2)))
+  assert(txn<Lease>() == digest, comment=lease must commit to the encoded args)
+  return 1
+}
+
+logicsig examples/devportal/lsig_with_args/contract.algo.ts::EscrowReleaseTo {
+  recipient: account = ARC4_DECODE(payee)
+  return txn<TypeEnum>() == reinterpret_cast<uint64>(1) and recipient == ARC4_DECODE(TemplateVar[arc4.static_array<arc4.byte,32>](TMPL_PAYEE_A)) or recipient == ARC4_DECODE(TemplateVar[arc4.static_array<arc4.byte,32>](TMPL_PAYEE_B)) and txn<Receiver>() == recipient and txn<Fee>() <= global<MinTxnFee>() and txn<RekeyTo>() == global<ZeroAddress>() and txn<CloseRemainderTo>() == global<ZeroAddress>()
+}
