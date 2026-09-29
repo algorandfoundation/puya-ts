@@ -67,20 +67,25 @@ export abstract class SubroutineExpressionBuilder extends InstanceBuilder {
  * Invoke a contract method on the current contract (ie. this.someMethod())
  */
 export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
-  declare readonly target: ContractMethodTarget
+  declare readonly target: ContractMethodTarget | InstanceMethodTarget
 
   constructor(
     sourceLocation: SourceLocation,
     ptype: FunctionPType,
     public readonly contractType: ContractClassPType,
+    dispatch: 'instance' | 'contract',
   ) {
     super(
       sourceLocation,
       ptype,
-      nodeFactory.contractMethodTarget({
-        cref: ContractReference.fromPType(contractType),
-        memberName: ptype.name,
-      }),
+      // Calls through `this` must follow the concrete contract's MRO,
+      // including when the calling method was inherited from a base class
+      dispatch === 'instance'
+        ? nodeFactory.instanceMethodTarget({ memberName: ptype.name })
+        : nodeFactory.contractMethodTarget({
+            cref: ContractReference.fromPType(contractType),
+            memberName: ptype.name,
+          }),
     )
   }
 
