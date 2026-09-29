@@ -67,11 +67,11 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
     }
     const method = this.ptype.methods[name]
     if (method) {
-      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype)
+      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype, 'instance')
     }
     for (const base of this.ptype.allBases()) {
       if (name in base.methods) {
-        return new ContractMethodExpressionBuilder(sourceLocation, base.methods[name], base)
+        return new ContractMethodExpressionBuilder(sourceLocation, base.methods[name], base, 'instance')
       }
     }
     return super.memberAccess(name, sourceLocation)
@@ -165,7 +165,7 @@ class PolytypeExplicitClassAccessExpressionBuilder extends InstanceBuilder {
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     const method = this.ptype.methods[name]
     if (method) {
-      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype)
+      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype, 'contract')
     }
     if (name in this.ptype.properties) {
       throw new CodeError(`Not Supported: Accessing properties of a specific base type. Instead just use \`this.${name}\``, {
@@ -220,7 +220,7 @@ class ContractClassPrototypeBuilder extends NodeBuilder {
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     const method = this.ptype.methods[name]
     if (method) {
-      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype)
+      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype, 'contract')
     }
     return super.memberAccess(name, sourceLocation)
   }
