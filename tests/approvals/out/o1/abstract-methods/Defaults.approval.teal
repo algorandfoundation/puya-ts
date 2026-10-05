@@ -1,0 +1,36 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/abstract-methods.algo.ts:72
+    // class Defaults extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0xd557133a // method "value()uint64"
+    txna ApplicationArgs 0
+    match main_value_route@3
+    err
+
+main_value_route@3:
+    // tests/approvals/abstract-methods.algo.ts:73
+    // value(): uint64 {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert
+    pushbytes 0x151f7c750000000000000001
+    log
+    pushint 1
+    return
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/abstract-methods.algo.ts:72
+    // class Defaults extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
