@@ -1,0 +1,70 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1
+    bytecblock 0x151f7c750000000000000002
+    // tests/approvals/override-dispatch.algo.ts:39
+    // export class Multiple extends classes(Leaf, Other) {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@14
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x0161192c 0xd557133a 0x9a518d82 0x490e374f 0x90ade69f // method "fromOther()uint64", method "value()uint64", method "fromSuper()uint64", method "read()uint64", method "readOther()uint64"
+    txna ApplicationArgs 0
+    match main_fromOther_route@6 main_value_route@7 main_fromSuper_route@8 main_read_route@9 main_readOther_route@10
+    err
+
+main_readOther_route@10:
+    // tests/approvals/override-dispatch.algo.ts:34
+    // readOther(): uint64 {
+    bytec_0 // 0x151f7c750000000000000002
+    log
+    intc_0 // 1
+    return
+
+main_read_route@9:
+    // tests/approvals/override-dispatch.algo.ts:10
+    // read(): uint64 {
+    bytec_0 // 0x151f7c750000000000000002
+    log
+    intc_0 // 1
+    return
+
+main_fromSuper_route@8:
+    // tests/approvals/override-dispatch.algo.ts:24
+    // fromSuper(): uint64 {
+    pushbytes 0x151f7c750000000000000001
+    log
+    intc_0 // 1
+    return
+
+main_value_route@7:
+    // tests/approvals/override-dispatch.algo.ts:19
+    // override value(): uint64 {
+    bytec_0 // 0x151f7c750000000000000002
+    log
+    intc_0 // 1
+    return
+
+main_fromOther_route@6:
+    // tests/approvals/override-dispatch.algo.ts:45
+    // fromOther(): uint64 {
+    pushbytes 0x151f7c750000000000000003
+    log
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@14:
+    // tests/approvals/override-dispatch.algo.ts:39
+    // export class Multiple extends classes(Leaf, Other) {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return

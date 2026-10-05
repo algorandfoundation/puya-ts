@@ -1,0 +1,304 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0
+    bytecblock 0x151f7c75
+    b main_block@0
+
+main_block@0:
+    txn ApplicationID
+    bnz main_after_if_else@2
+    b main_if_body@1
+
+main_if_body@1:
+    callsub constructor
+    b main_after_if_else@2
+
+main_after_if_else@2:
+    b main_block@3
+
+main_block@3:
+    // tests/approvals/override-dispatch.algo.ts:39
+    // export class Multiple extends classes(Leaf, Other) {
+    txn NumAppArgs
+    intc_1 // 0
+    !=
+    bz main___algots__.defaultCreate@14
+    b main_abi_routing@4
+
+main_abi_routing@4:
+    // tests/approvals/override-dispatch.algo.ts:39
+    // export class Multiple extends classes(Leaf, Other) {
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    assert
+    txn ApplicationID
+    intc_1 // 0
+    !=
+    bz main_create_NoOp@12
+    b main_call_NoOp@5
+
+main_call_NoOp@5:
+    // tests/approvals/override-dispatch.algo.ts:39
+    // export class Multiple extends classes(Leaf, Other) {
+    txna ApplicationArgs 0
+    pushbytes 0x0161192c // method "fromOther()uint64"
+    pushbytes 0xd557133a // method "value()uint64"
+    pushbytes 0x9a518d82 // method "fromSuper()uint64"
+    pushbytes 0x490e374f // method "read()uint64"
+    pushbytes 0x90ade69f // method "readOther()uint64"
+    uncover 5
+    match main_fromOther_route@6 main_value_route@7 main_fromSuper_route@8 main_read_route@9 main_readOther_route@10
+    b main_switch_case_next@11
+
+main_switch_case_next@11:
+    b main_after_if_else@13
+
+main_after_if_else@13:
+    b main_after_if_else@15
+
+main_after_if_else@15:
+    // tests/approvals/override-dispatch.algo.ts:39
+    // export class Multiple extends classes(Leaf, Other) {
+    err
+
+main_readOther_route@10:
+    // tests/approvals/override-dispatch.algo.ts:34
+    // readOther(): uint64 {
+    callsub readOther
+    b main_switch_case_next@11
+
+main_read_route@9:
+    // tests/approvals/override-dispatch.algo.ts:10
+    // read(): uint64 {
+    callsub read
+    b main_switch_case_next@11
+
+main_fromSuper_route@8:
+    // tests/approvals/override-dispatch.algo.ts:24
+    // fromSuper(): uint64 {
+    callsub fromSuper
+    b main_switch_case_next@11
+
+main_value_route@7:
+    // tests/approvals/override-dispatch.algo.ts:19
+    // override value(): uint64 {
+    callsub value
+    b main_switch_case_next@11
+
+main_fromOther_route@6:
+    // tests/approvals/override-dispatch.algo.ts:45
+    // fromOther(): uint64 {
+    callsub fromOther
+    b main_switch_case_next@11
+
+main_create_NoOp@12:
+    b main_after_if_else@13
+
+main___algots__.defaultCreate@14:
+    // tests/approvals/override-dispatch.algo.ts:39
+    // export class Multiple extends classes(Leaf, Other) {
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    txn ApplicationID
+    intc_1 // 0
+    ==
+    &&
+    assert
+    callsub __algots__.defaultCreate
+    intc_0 // 1
+    return
+
+
+// tests/approvals/override-dispatch.algo.ts::Multiple.fromOther[routing]() -> void:
+fromOther:
+    b fromOther_block@0
+
+fromOther_block@0:
+    // tests/approvals/override-dispatch.algo.ts:45
+    // fromOther(): uint64 {
+    callsub tests/approvals/override-dispatch.algo.ts::Multiple.fromOther
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/override-dispatch.algo.ts::Leaf.value[routing]() -> void:
+value:
+    b value_block@0
+
+value_block@0:
+    // tests/approvals/override-dispatch.algo.ts:19
+    // override value(): uint64 {
+    callsub tests/approvals/override-dispatch.algo.ts::Leaf.value
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/override-dispatch.algo.ts::Leaf.fromSuper[routing]() -> void:
+fromSuper:
+    b fromSuper_block@0
+
+fromSuper_block@0:
+    // tests/approvals/override-dispatch.algo.ts:24
+    // fromSuper(): uint64 {
+    callsub tests/approvals/override-dispatch.algo.ts::Leaf.fromSuper
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/override-dispatch.algo.ts::Base.read[routing]() -> void:
+read:
+    b read_block@0
+
+read_block@0:
+    // tests/approvals/override-dispatch.algo.ts:10
+    // read(): uint64 {
+    callsub tests/approvals/override-dispatch.algo.ts::Base.read
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/override-dispatch.algo.ts::Other.readOther[routing]() -> void:
+readOther:
+    b readOther_block@0
+
+readOther_block@0:
+    // tests/approvals/override-dispatch.algo.ts:34
+    // readOther(): uint64 {
+    callsub tests/approvals/override-dispatch.algo.ts::Other.readOther
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/override-dispatch.algo.ts::Multiple.fromOther() -> uint64:
+tests/approvals/override-dispatch.algo.ts::Multiple.fromOther:
+    b tests/approvals/override-dispatch.algo.ts::Multiple.fromOther_block@0
+
+tests/approvals/override-dispatch.algo.ts::Multiple.fromOther_block@0:
+    // tests/approvals/override-dispatch.algo.ts:46
+    // return super.class(Other).value()
+    callsub tests/approvals/override-dispatch.algo.ts::Other.value
+    retsub
+
+
+// tests/approvals/override-dispatch.algo.ts::Leaf.value() -> uint64:
+tests/approvals/override-dispatch.algo.ts::Leaf.value:
+    b tests/approvals/override-dispatch.algo.ts::Leaf.value_block@0
+
+tests/approvals/override-dispatch.algo.ts::Leaf.value_block@0:
+    // tests/approvals/override-dispatch.algo.ts:20
+    // return 2
+    pushint 2
+    retsub
+
+
+// tests/approvals/override-dispatch.algo.ts::Leaf.fromSuper() -> uint64:
+tests/approvals/override-dispatch.algo.ts::Leaf.fromSuper:
+    b tests/approvals/override-dispatch.algo.ts::Leaf.fromSuper_block@0
+
+tests/approvals/override-dispatch.algo.ts::Leaf.fromSuper_block@0:
+    // tests/approvals/override-dispatch.algo.ts:25
+    // return super.value()
+    callsub tests/approvals/override-dispatch.algo.ts::Base.value
+    retsub
+
+
+// tests/approvals/override-dispatch.algo.ts::Base.value() -> uint64:
+tests/approvals/override-dispatch.algo.ts::Base.value:
+    b tests/approvals/override-dispatch.algo.ts::Base.value_block@0
+
+tests/approvals/override-dispatch.algo.ts::Base.value_block@0:
+    // tests/approvals/override-dispatch.algo.ts:7
+    // return 1
+    intc_0 // 1
+    retsub
+
+
+// tests/approvals/override-dispatch.algo.ts::Base.read() -> uint64:
+tests/approvals/override-dispatch.algo.ts::Base.read:
+    b tests/approvals/override-dispatch.algo.ts::Base.read_block@0
+
+tests/approvals/override-dispatch.algo.ts::Base.read_block@0:
+    // tests/approvals/override-dispatch.algo.ts:11
+    // return this.value()
+    callsub tests/approvals/override-dispatch.algo.ts::Leaf.value
+    retsub
+
+
+// tests/approvals/override-dispatch.algo.ts::Other.value() -> uint64:
+tests/approvals/override-dispatch.algo.ts::Other.value:
+    b tests/approvals/override-dispatch.algo.ts::Other.value_block@0
+
+tests/approvals/override-dispatch.algo.ts::Other.value_block@0:
+    // tests/approvals/override-dispatch.algo.ts:31
+    // return 3
+    pushint 3
+    retsub
+
+
+// tests/approvals/override-dispatch.algo.ts::Other.readOther() -> uint64:
+tests/approvals/override-dispatch.algo.ts::Other.readOther:
+    b tests/approvals/override-dispatch.algo.ts::Other.readOther_block@0
+
+tests/approvals/override-dispatch.algo.ts::Other.readOther_block@0:
+    // tests/approvals/override-dispatch.algo.ts:35
+    // return this.value()
+    callsub tests/approvals/override-dispatch.algo.ts::Leaf.value
+    retsub
+
+
+// tests/approvals/override-dispatch.algo.ts::Multiple.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub
+
+
+// polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/override-dispatch.algo.ts::Leaf,tests/approvals/override-dispatch.algo.ts::Other>.constructor() -> void:
+constructor:
+    b constructor_block@0
+
+constructor_block@0:
+    b constructor_block@1
+
+constructor_block@1:
+    b constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2
+
+constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
+    b constructor_block@3
+
+constructor_block@3:
+    b constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@4
+
+constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@4:
+    retsub
