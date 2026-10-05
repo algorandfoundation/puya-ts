@@ -1,0 +1,72 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    bytecblock 0x151f7c7500056669727374
+    // tests/approvals/abstract-methods.algo.ts:24
+    // export class First extends Intermediate {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@10
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x8a8e99db 0x82685c0e 0x2cb25118 // method "label()string", method "getEmpty(uint64)(uint64,uint64)", method "describe()string"
+    txna ApplicationArgs 0
+    match main_label_route@4 getEmpty main_describe_route@6
+    err
+
+main_describe_route@6:
+    // tests/approvals/abstract-methods.algo.ts:16
+    // describe(): string {
+    bytec_0 // 0x151f7c7500056669727374
+    log
+    pushint 1
+    return
+
+main_label_route@4:
+    // tests/approvals/abstract-methods.algo.ts:29
+    // label(): string {
+    bytec_0 // 0x151f7c7500056669727374
+    log
+    pushint 1
+    return
+
+main___algots__.defaultCreate@10:
+    // tests/approvals/abstract-methods.algo.ts:24
+    // export class First extends Intermediate {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.getEmpty[routing]() -> void:
+getEmpty:
+    // tests/approvals/abstract-methods.algo.ts:12
+    // getEmpty(id: uint64): Entry {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/abstract-methods.algo.ts:26
+    // return { id, balance: 10 }
+    itob
+    pushint 10
+    itob
+    concat
+    // tests/approvals/abstract-methods.algo.ts:12
+    // getEmpty(id: uint64): Entry {
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    pushint 1
+    return

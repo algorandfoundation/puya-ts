@@ -1,0 +1,275 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock 0x151f7c75
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/abstract-methods.algo.ts:35
+    // export class Second extends First {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main___algots__.defaultCreate@11
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    // tests/approvals/abstract-methods.algo.ts:35
+    // export class Second extends First {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@9
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
+    // tests/approvals/abstract-methods.algo.ts:35
+    // export class Second extends First {
+    txna ApplicationArgs 0
+    pushbytes 0x8a8e99db // method "label()string"
+    pushbytes 0x8af4ae34 // method "firstLabel()string"
+    pushbytes 0x82685c0e // method "getEmpty(uint64)(uint64,uint64)"
+    pushbytes 0x2cb25118 // method "describe()string"
+    uncover 4
+    match main_label_route@4 main_firstLabel_route@5 main_getEmpty_route@6 main_describe_route@7
+    b main_switch_case_next@8
+
+main_switch_case_next@8:
+    b main_after_if_else@10
+
+main_after_if_else@10:
+    b main_after_if_else@12
+
+main_after_if_else@12:
+    // tests/approvals/abstract-methods.algo.ts:35
+    // export class Second extends First {
+    err
+
+main_describe_route@7:
+    // tests/approvals/abstract-methods.algo.ts:16
+    // describe(): string {
+    callsub describe
+    b main_switch_case_next@8
+
+main_getEmpty_route@6:
+    // tests/approvals/abstract-methods.algo.ts:12
+    // getEmpty(id: uint64): Entry {
+    callsub getEmpty
+    b main_switch_case_next@8
+
+main_firstLabel_route@5:
+    // tests/approvals/abstract-methods.algo.ts:44
+    // firstLabel(): string {
+    callsub firstLabel
+    b main_switch_case_next@8
+
+main_label_route@4:
+    // tests/approvals/abstract-methods.algo.ts:40
+    // label(): string {
+    callsub label
+    b main_switch_case_next@8
+
+main_create_NoOp@9:
+    b main_after_if_else@10
+
+main___algots__.defaultCreate@11:
+    // tests/approvals/abstract-methods.algo.ts:35
+    // export class Second extends First {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Second.label[routing]() -> void:
+label:
+    b label_block@0
+
+label_block@0:
+    // tests/approvals/abstract-methods.algo.ts:40
+    // label(): string {
+    callsub tests/approvals/abstract-methods.algo.ts::Second.label
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Second.firstLabel[routing]() -> void:
+firstLabel:
+    b firstLabel_block@0
+
+firstLabel_block@0:
+    // tests/approvals/abstract-methods.algo.ts:44
+    // firstLabel(): string {
+    callsub tests/approvals/abstract-methods.algo.ts::Second.firstLabel
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.getEmpty[routing]() -> void:
+getEmpty:
+    b getEmpty_block@0
+
+getEmpty_block@0:
+    // tests/approvals/abstract-methods.algo.ts:12
+    // getEmpty(id: uint64): Entry {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/abstract-methods.algo.ts::Base.getEmpty
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.describe[routing]() -> void:
+describe:
+    b describe_block@0
+
+describe_block@0:
+    // tests/approvals/abstract-methods.algo.ts:16
+    // describe(): string {
+    callsub tests/approvals/abstract-methods.algo.ts::Base.describe
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Second.empty(id: uint64) -> bytes:
+empty:
+    // tests/approvals/abstract-methods.algo.ts:36
+    // protected empty(id: uint64): Entry {
+    proto 1 1
+    b empty_block@0
+
+empty_block@0:
+    // tests/approvals/abstract-methods.algo.ts:37
+    // return { id, balance: 20 }
+    frame_dig -1
+    itob
+    pushbytes 0x
+    uncover 1
+    concat
+    pushint 20
+    itob
+    concat
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::Second.label() -> bytes:
+tests/approvals/abstract-methods.algo.ts::Second.label:
+    b tests/approvals/abstract-methods.algo.ts::Second.label_block@0
+
+tests/approvals/abstract-methods.algo.ts::Second.label_block@0:
+    // tests/approvals/abstract-methods.algo.ts:41
+    // return 'second'
+    pushbytes "second"
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::Second.firstLabel() -> bytes:
+tests/approvals/abstract-methods.algo.ts::Second.firstLabel:
+    b tests/approvals/abstract-methods.algo.ts::Second.firstLabel_block@0
+
+tests/approvals/abstract-methods.algo.ts::Second.firstLabel_block@0:
+    // tests/approvals/abstract-methods.algo.ts:45
+    // return super.label()
+    callsub tests/approvals/abstract-methods.algo.ts::First.label
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::First.label() -> bytes:
+tests/approvals/abstract-methods.algo.ts::First.label:
+    b tests/approvals/abstract-methods.algo.ts::First.label_block@0
+
+tests/approvals/abstract-methods.algo.ts::First.label_block@0:
+    // tests/approvals/abstract-methods.algo.ts:30
+    // return 'first'
+    pushbytes "first"
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.getEmpty(id: uint64) -> bytes:
+tests/approvals/abstract-methods.algo.ts::Base.getEmpty:
+    // tests/approvals/abstract-methods.algo.ts:12
+    // getEmpty(id: uint64): Entry {
+    proto 1 1
+    b tests/approvals/abstract-methods.algo.ts::Base.getEmpty_block@0
+
+tests/approvals/abstract-methods.algo.ts::Base.getEmpty_block@0:
+    // tests/approvals/abstract-methods.algo.ts:13
+    // return this.empty(id)
+    frame_dig -1
+    callsub empty
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.describe() -> bytes:
+tests/approvals/abstract-methods.algo.ts::Base.describe:
+    b tests/approvals/abstract-methods.algo.ts::Base.describe_block@0
+
+tests/approvals/abstract-methods.algo.ts::Base.describe_block@0:
+    // tests/approvals/abstract-methods.algo.ts:17
+    // return this.label()
+    callsub tests/approvals/abstract-methods.algo.ts::Second.label
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::Second.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub

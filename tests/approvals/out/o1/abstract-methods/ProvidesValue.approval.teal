@@ -1,0 +1,44 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/abstract-methods.algo.ts:82
+    // export class ProvidesValue extends RequiresValue {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0xd557133a 0xfc987bd7 // method "value()uint64", method "fromPrototype()uint64"
+    txna ApplicationArgs 0
+    match main_value_route@4 main_fromPrototype_route@5
+    err
+
+main_fromPrototype_route@5:
+    // tests/approvals/abstract-methods.algo.ts:87
+    // fromPrototype(): uint64 {
+    pushbytes 0x151f7c750000000000000001
+    log
+    pushint 1
+    return
+
+main_value_route@4:
+    // tests/approvals/abstract-methods.algo.ts:83
+    // value(): uint64 {
+    pushbytes 0x151f7c750000000000000002
+    log
+    pushint 1
+    return
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/abstract-methods.algo.ts:82
+    // export class ProvidesValue extends RequiresValue {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
