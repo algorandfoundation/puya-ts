@@ -25,7 +25,7 @@ import { visitInChildContext } from './util'
 
 export class ContractVisitor extends ClassDefinitionVisitor {
   private _ctor?: () => ContractMethod
-  private _methods: Array<() => ContractMethod> = []
+  private _methods: Array<() => ContractMethod | undefined> = []
   private readonly _contractPType: ContractClassPType
   private readonly _propertyInitialization: awst.Statement[] = []
 
@@ -80,6 +80,7 @@ export class ContractVisitor extends ClassDefinitionVisitor {
 
     for (const deferredMethod of this._methods) {
       const contractMethod = deferredMethod()
+      if (!contractMethod) continue
       switch (contractMethod.memberName) {
         case Constants.symbolNames.approvalProgramMethodName:
           approvalProgram = contractMethod

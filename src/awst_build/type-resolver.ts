@@ -427,6 +427,10 @@ export class TypeResolver {
       const paramType = this.checker.getTypeOfSymbol(p)
       return [p.name, this.resolveType(paramType, this.getLocationOfSymbol(p) ?? sourceLocation)] as const
     })
+    const isAbstract =
+      sig.declaration !== undefined &&
+      ts.isMethodDeclaration(sig.declaration) &&
+      Boolean(sig.declaration.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword))
     return new FunctionPType({
       returnType,
       parameters,
@@ -434,6 +438,7 @@ export class TypeResolver {
       module: typeName.module,
       sourceLocation,
       declaredIn,
+      isAbstract,
     })
   }
 

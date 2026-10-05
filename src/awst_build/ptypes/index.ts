@@ -678,6 +678,7 @@ export class FunctionPType extends PType {
   readonly singleton = true
   readonly sourceLocation: SourceLocation | undefined
   readonly declaredIn: SymbolName | undefined
+  readonly isAbstract: boolean
 
   constructor(props: {
     name: string
@@ -686,6 +687,7 @@ export class FunctionPType extends PType {
     parameters: Array<readonly [string, PType]>
     sourceLocation: SourceLocation | undefined
     declaredIn?: SymbolName
+    isAbstract?: boolean
   }) {
     super()
     this.name = props.name
@@ -694,6 +696,7 @@ export class FunctionPType extends PType {
     this.returnType = props.returnType
     this.parameters = props.parameters
     this.declaredIn = props.declaredIn
+    this.isAbstract = props.isAbstract ?? false
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
