@@ -1,0 +1,53 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    bytecblock 0x151f7c750000000000000002
+    // tests/approvals/override-dispatch.algo.ts:15
+    // export class Leaf extends Base {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@10
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0xd557133a 0x9a518d82 0x490e374f // method "value()uint64", method "fromSuper()uint64", method "read()uint64"
+    txna ApplicationArgs 0
+    match main_value_route@4 main_fromSuper_route@5 main_read_route@6
+    err
+
+main_read_route@6:
+    // tests/approvals/override-dispatch.algo.ts:10
+    // read(): uint64 {
+    bytec_0 // 0x151f7c750000000000000002
+    log
+    pushint 1
+    return
+
+main_fromSuper_route@5:
+    // tests/approvals/override-dispatch.algo.ts:24
+    // fromSuper(): uint64 {
+    pushbytes 0x151f7c750000000000000001
+    log
+    pushint 1
+    return
+
+main_value_route@4:
+    // tests/approvals/override-dispatch.algo.ts:19
+    // override value(): uint64 {
+    bytec_0 // 0x151f7c750000000000000002
+    log
+    pushint 1
+    return
+
+main___algots__.defaultCreate@10:
+    // tests/approvals/override-dispatch.algo.ts:15
+    // export class Leaf extends Base {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
