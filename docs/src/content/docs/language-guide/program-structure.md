@@ -229,6 +229,42 @@ class Arc4HybridAlgo extends Contract {
 }
 ```
 
+### Abstract contracts and methods
+
+An abstract contract can share state and method implementations while leaving specific behaviour to its subclasses. Abstract methods declare a signature without a body, and calls to them through `this` resolve to the implementation supplied by the concrete contract.
+
+```ts
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import { Contract, GlobalState } from '@algorandfoundation/algorand-typescript'
+
+abstract class Counter extends Contract {
+  count = GlobalState<uint64>({ initialValue: 0 })
+
+  protected abstract step(): uint64
+
+  increment(): uint64 {
+    this.count.value += this.step()
+    return this.count.value
+  }
+}
+
+class CountByOne extends Counter {
+  protected step(): uint64 {
+    return 1
+  }
+}
+
+class CountByTen extends Counter {
+  protected step(): uint64 {
+    return 10
+  }
+}
+```
+
+Only concrete contracts produce compilation artifacts, and they must implement every inherited abstract method. An abstract method has no implementation, so it cannot be called through `super` or a class prototype (e.g. `Counter.prototype.step()`), unless it redeclares an inherited method as `abstract override`, in which case the inherited implementation is called, as it is in TypeScript. Public abstract methods on an ARC4 contract can still be referenced by `arc4.abiCall` and `arc4.methodSelector`, which use the declaration's signature and default ABI name. Since TypeScript does not allow decorators on abstract methods, apply any decorators to the concrete implementation.
+
+Method signatures and storage types **must** still be concrete Algorand TypeScript types (parametric types are not supported as of today).
+
 ### Multi-inheritance
 
 JavaScript does not support multi-inheritance natively, but it is a useful feature for composing a larger contract out of several smaller ones. Algorand TypeScript supports multi-inheritance via the [Polytype](https://github.com/fasttime/Polytype) package, and the compiled code matches the semantics of Polytype at runtime. Method resolution order is _depth first_, meaning the entire prototype hierarchy of the _first_ base type will be walked before moving onto the _second_ base type and so on.

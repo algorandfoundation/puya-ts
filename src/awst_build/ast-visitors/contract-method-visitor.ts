@@ -81,7 +81,15 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     }
   }
 
-  get result() {
+  get result(): ContractMethod | undefined {
+    // Abstract declarations contribute type and ABI metadata, but no implementation
+    if (this._functionType.isAbstract) {
+      // Run the signature checks buildFunctionAwst() would otherwise perform
+      for (const parameter of this.node.parameters) this.accept(parameter)
+      this._functionType.returnType.wtypeOrThrow
+      return undefined
+    }
+
     const { args, body, documentation } = this.buildFunctionAwst()
 
     return new ContractMethod({
@@ -98,7 +106,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     })
   }
 
-  public static buildContractMethod(node: ts.MethodDeclaration, contractType: ContractClassPType): () => ContractMethod {
+  public static buildContractMethod(node: ts.MethodDeclaration, contractType: ContractClassPType): () => ContractMethod | undefined {
     return visitInChildContext(this, node, contractType)
   }
 
