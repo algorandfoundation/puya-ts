@@ -44,7 +44,7 @@ contract NativeArraysAlgo
   doThings(): void
   {
     ensure_budget(1400, 0)
-    arr: arc4.dynamic_array<uint64> = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray()
+    arr: arc4.dynamic_array<uint64> = this.buildArray()
     arr.push(...#[5]), arr.length
     assert(arr.pop() == 5)
     assert(&&(&&(&&(&&(arr.length == 4, arr[0] == 1), arr[1] == 2), arr[2] == 3), arr[3] == 4), comment=assert target is match for conditions)
@@ -167,9 +167,9 @@ contract NativeArraysAlgo
     needClone2: arc4.dynamic_array<uint64> = convert_array(copy(mutable), wtype=arc4.dynamic_array<uint64>)
     mutable[1]: uint64 = mutable[1] + 2
     assert(mutable[1] != needClone2[1], comment=These should not match)
-    tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(mutable)
-    tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(convert_array(mutable, wtype=arc4.dynamic_array<uint64>))
-    tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(readOnly)
+    this.receiveMutable(mutable)
+    this.receiveReadonly(convert_array(mutable, wtype=arc4.dynamic_array<uint64>))
+    this.receiveReadonly(readOnly)
   }
   
   receiveMutable(a: arc4.dynamic_array<uint64>): void
