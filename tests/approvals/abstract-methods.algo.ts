@@ -16,10 +16,20 @@ abstract class Base extends Contract {
   describe(): string {
     return this.label()
   }
+
+  // Combines two abstract methods
+  summary(id: uint64): [string, uint64] {
+    return [this.label(), this.empty(id).balance]
+  }
 }
 
 // Abstract subclasses don't need to implement anything
-abstract class Intermediate extends Base {}
+abstract class Intermediate extends Base {
+  // Methods defined on an abstract subclass can call the abstract methods too
+  doubleBalance(id: uint64): uint64 {
+    return this.empty(id).balance * 2
+  }
+}
 
 export class First extends Intermediate {
   protected empty(id: uint64): Entry {

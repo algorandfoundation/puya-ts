@@ -18,6 +18,10 @@ describe('abstract-methods', () => {
     expect(await call(appClientSecond, 'describe')).toBe('second')
     expect(await call(appClientSecond, 'getEmpty', 1n)).toEqual({ id: 1n, balance: 20n })
     expect(await call(appClientSecond, 'firstLabel')).toBe('first')
+    expect(await call(appClientFirst, 'summary', 1n)).toEqual(['first', 10n])
+    expect(await call(appClientSecond, 'summary', 1n)).toEqual(['second', 20n])
+    expect(await call(appClientFirst, 'doubleBalance', 1n)).toBe(20n)
+    expect(await call(appClientSecond, 'doubleBalance', 1n)).toBe(40n)
   })
 
   test('abstract ABI methods can be called', async ({ appClientCaller, appClientSecond }) => {
