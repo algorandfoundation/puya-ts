@@ -1,0 +1,150 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 8 20
+    bytecblock 0x151f7c75 0x151f7c7500067365636f6e64
+    // tests/approvals/abstract-methods.algo.ts:45
+    // export class Second extends First {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@13
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x8a8e99db 0x8af4ae34 0x6a8b798a 0x82685c0e 0x2cb25118 0x5d21aa45 // method "label()string", method "firstLabel()string", method "doubleBalance(uint64)uint64", method "getEmpty(uint64)(uint64,uint64)", method "describe()string", method "summary(uint64)(string,uint64)"
+    txna ApplicationArgs 0
+    match main_label_route@4 main_firstLabel_route@5 doubleBalance getEmpty main_describe_route@8 summary
+    err
+
+main_describe_route@8:
+    // tests/approvals/abstract-methods.algo.ts:16
+    // describe(): string {
+    bytec_1 // 0x151f7c7500067365636f6e64
+    log
+    intc_0 // 1
+    return
+
+main_firstLabel_route@5:
+    // tests/approvals/abstract-methods.algo.ts:54
+    // firstLabel(): string {
+    pushbytes 0x151f7c7500056669727374
+    log
+    intc_0 // 1
+    return
+
+main_label_route@4:
+    // tests/approvals/abstract-methods.algo.ts:50
+    // label(): string {
+    bytec_1 // 0x151f7c7500067365636f6e64
+    log
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@13:
+    // tests/approvals/abstract-methods.algo.ts:45
+    // export class Second extends First {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Intermediate.doubleBalance[routing]() -> void:
+doubleBalance:
+    // tests/approvals/abstract-methods.algo.ts:29
+    // doubleBalance(id: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/abstract-methods.algo.ts:47
+    // return { id, balance: 20 }
+    itob
+    intc_2 // 20
+    itob
+    concat
+    // tests/approvals/abstract-methods.algo.ts:30
+    // return this.empty(id).balance * 2
+    intc_1 // 8
+    extract_uint64
+    pushint 2
+    *
+    // tests/approvals/abstract-methods.algo.ts:29
+    // doubleBalance(id: uint64): uint64 {
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.getEmpty[routing]() -> void:
+getEmpty:
+    // tests/approvals/abstract-methods.algo.ts:12
+    // getEmpty(id: uint64): Entry {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/abstract-methods.algo.ts:47
+    // return { id, balance: 20 }
+    itob
+    intc_2 // 20
+    itob
+    concat
+    // tests/approvals/abstract-methods.algo.ts:12
+    // getEmpty(id: uint64): Entry {
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.summary[routing]() -> void:
+summary:
+    // tests/approvals/abstract-methods.algo.ts:21
+    // summary(id: uint64): [string, uint64] {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/abstract-methods.algo.ts:47
+    // return { id, balance: 20 }
+    itob
+    intc_2 // 20
+    itob
+    concat
+    // tests/approvals/abstract-methods.algo.ts:22
+    // return [this.label(), this.empty(id).balance]
+    extract 8 8
+    pushbytes 0x000a
+    swap
+    concat
+    pushbytes 0x00067365636f6e64
+    concat
+    // tests/approvals/abstract-methods.algo.ts:21
+    // summary(id: uint64): [string, uint64] {
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return

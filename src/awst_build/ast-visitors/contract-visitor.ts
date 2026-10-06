@@ -3,12 +3,14 @@ import { ContractReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type * as awst from '../../awst/nodes'
 import type { ContractMethod } from '../../awst/nodes'
+import { ARC4ABIMethodConfig } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
+import { checkAbstractAbiImplementation } from '../arc4-util'
 import { BoxProxyExpressionBuilder } from '../eb/storage/box'
 import { GlobalMapFunctionResultBuilder } from '../eb/storage/global-map'
 import { GlobalStateFunctionResultBuilder } from '../eb/storage/global-state'
@@ -25,7 +27,7 @@ import { visitInChildContext } from './util'
 
 export class ContractVisitor extends ClassDefinitionVisitor {
   private _ctor?: () => ContractMethod
-  private _methods: Array<() => ContractMethod> = []
+  private _methods: Array<() => ContractMethod | undefined> = []
   private readonly _contractPType: ContractClassPType
   private readonly _propertyInitialization: awst.Statement[] = []
 
@@ -72,6 +74,7 @@ export class ContractVisitor extends ClassDefinitionVisitor {
 
   get result(): [] | [awst.Contract] {
     const { isAbstract, sourceLocation, contractOptions, description } = this.metaData
+    if (!isAbstract) this.validateInheritedAbstractAbiImplementations()
 
     let approvalProgram: ContractMethod | null = null
     let clearProgram: ContractMethod | null = null
@@ -80,6 +83,7 @@ export class ContractVisitor extends ClassDefinitionVisitor {
 
     for (const deferredMethod of this._methods) {
       const contractMethod = deferredMethod()
+      if (!contractMethod) continue
       switch (contractMethod.memberName) {
         case Constants.symbolNames.approvalProgramMethodName:
           approvalProgram = contractMethod
@@ -111,6 +115,36 @@ export class ContractVisitor extends ClassDefinitionVisitor {
       return [contractClass.buildContract(this.context.compilationSet)]
     }
     return []
+  }
+
+  /**
+   * With multi-inheritance, a base unrelated to the one declaring an abstract ABI method can provide its implementation.
+   * No method visitor sees that as an implementation, so check the one this contract routes: the first in its method
+   * resolution order
+   */
+  private validateInheritedAbstractAbiImplementations() {
+    const hierarchy = [this._contractPType, ...this._contractPType.allBases()]
+    for (const base of this._contractPType.allBases()) {
+      for (const [name, declaration] of Object.entries(base.methods)) {
+        if (!declaration.isAbstract || declaration.declaredIn?.fullName !== base.fullName) continue
+        const declarationConfig = this.context.getArc4Config(base, name)
+        if (!(declarationConfig instanceof ARC4ABIMethodConfig)) continue
+
+        const implementer = hierarchy.find((t) => t.methods[name]?.declaredIn?.fullName === t.fullName && !t.methods[name].isAbstract)
+        // Implementations in a subclass of the declaring class were checked when visiting them
+        if (!implementer || Array.from(implementer.allBases()).some((b) => b.fullName === base.fullName)) continue
+
+        checkAbstractAbiImplementation({
+          declaration: { name: `${base.name}.${name}`, type: declaration, config: declarationConfig },
+          implementation: {
+            name: `${implementer.name}.${name}`,
+            type: implementer.methods[name],
+            config: this.context.getArc4Config(implementer, name),
+          },
+          sourceLocation: this.metaData.sourceLocation,
+        })
+      }
+    }
   }
 
   private acceptAndIgnoreBuildErrors(node: ts.ClassElement) {

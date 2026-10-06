@@ -318,6 +318,8 @@ p2.x = 3
 
 Object types and literals are treated as named tuples. The types themselves can be declared with a name using a `type NAME = { ... }` expression, or anonymously using an inline type annotation `let x: { a: boolean } = { ... }`. If no type annotation is present, the type will be inferred from the assigned values. Object types are mutable unless they are declared with the `Readonly` type helper type, or the `readonly` keyword on every property. i.e. `{ a: boolean }` is mutable and `Readonly<{ a: boolean }>` or `{ readonly a: boolean }` is immutable. An immutable object's property can be updated using a spread expression.
 
+The order in which an object type declares its properties is the order of the fields in its compiled tuple, so `{ a: uint64; b: uint64 }` and `{ b: uint64; a: uint64 }` have different layouts even though TypeScript treats them as the same type. Values are converted by property name when they are assigned or passed between such types, with one exception: a contract method override must declare the properties of its object parameters and return type in the same order as the method it overrides, since calls to it are compiled against that method's layout.
+
 Mutable objects have the same reference restriction and clone requirement as mutable arrays.
 
 ```ts

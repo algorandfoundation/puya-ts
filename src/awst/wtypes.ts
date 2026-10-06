@@ -17,6 +17,17 @@ export namespace wtypes {
       return other instanceof this.constructor && other.name === this.name
     }
 
+    /**
+     * Unlike `equals`, this compares the "compiled structure" (comparing structs, tuples and
+     * arrays field by field rather than by name).
+     * This means two aliases with identical fields are the same, while two instantiations of
+     * a generic alias (e.g. `Wrapper<A>` and `Wrapper<B>`) differ if their fields differ.
+     * Note that field order matters (e.g. `{ a; b }` =/= `{ b; a }`).
+     */
+    hasSameStructure(other: WType): boolean {
+      return structureKey(this) === structureKey(other)
+    }
+
     toString(): string {
       return this.name
     }
@@ -341,4 +352,14 @@ export namespace wtypes {
     elementType: arc4ByteAliasWType,
     immutable: true,
   })
+
+  function structureKey(t: WType): string {
+    const kind = `${t.constructor.name}${t.immutable ? '' : '!'}`
+    if (t instanceof ARC4Struct) return `${kind}{${t.fields.map((f) => `${f.name}:${structureKey(f.wtype)}`)}}`
+    if (t instanceof WTuple) return `${kind}(${t.types.map((x, i) => `${t.names?.[i] ?? ''}:${structureKey(x)}`)})`
+    if (t instanceof ARC4Tuple) return `${kind}(${t.types.map(structureKey)})`
+    if (t instanceof ARC4StaticArray) return `${kind}[${structureKey(t.elementType)};${t.arraySize}]`
+    if (t instanceof ARC4DynamicArray || t instanceof ReferenceArray) return `${kind}[${structureKey(t.elementType)}]`
+    return `${kind}:${t.name}`
+  }
 }

@@ -1,0 +1,203 @@
+contract First
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  empty(id: uint64): tests/approvals/abstract-methods.algo.ts::Entry
+  {
+    return new tests/approvals/abstract-methods.algo.ts::Entry(id=($0 = #{ id: ($1 = #[id, 10]).0, balance: $1.1 }).id, balance=$0.balance)
+  }
+  
+  label(): string
+  {
+    return "first"
+  }
+  
+  Intermediate::doubleBalance(id: uint64): uint64
+  {
+    return this.empty(id).balance * 2
+  }
+  
+  Base::getEmpty(id: uint64): tests/approvals/abstract-methods.algo.ts::Entry
+  {
+    return this.empty(id)
+  }
+  
+  Base::describe(): string
+  {
+    return this.label()
+  }
+  
+  Base::summary(id: uint64): arc4.tuple<string,uint64>
+  {
+    return ARC4_ENCODE(#[this.label(), this.empty(id).balance], wtype=arc4.tuple<string,uint64>)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract Second
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  empty(id: uint64): tests/approvals/abstract-methods.algo.ts::Entry
+  {
+    return new tests/approvals/abstract-methods.algo.ts::Entry(id=($2 = #{ id: ($3 = #[id, 20]).0, balance: $3.1 }).id, balance=$2.balance)
+  }
+  
+  label(): string
+  {
+    return "second"
+  }
+  
+  firstLabel(): string
+  {
+    return super.label()
+  }
+  
+  First::empty(id: uint64): tests/approvals/abstract-methods.algo.ts::Entry
+  {
+    return new tests/approvals/abstract-methods.algo.ts::Entry(id=$0.id, balance=$0.balance)
+  }
+  
+  First::label(): string
+  {
+    return "first"
+  }
+  
+  Intermediate::doubleBalance(id: uint64): uint64
+  {
+    return this.empty(id).balance * 2
+  }
+  
+  Base::getEmpty(id: uint64): tests/approvals/abstract-methods.algo.ts::Entry
+  {
+    return this.empty(id)
+  }
+  
+  Base::describe(): string
+  {
+    return this.label()
+  }
+  
+  Base::summary(id: uint64): arc4.tuple<string,uint64>
+  {
+    return ARC4_ENCODE(#[this.label(), this.empty(id).balance], wtype=arc4.tuple<string,uint64>)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract Caller
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  callLabel(appId: application): string
+  {
+    return #{ itxn: ($4 = submit_txn(abi_call(signature={name="label",args=(),result=string}, args=(), fields={Fee=0, TypeEnum=appl, ApplicationID=appId}))), returnValue: ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($5 = $4.LastLog)), extract<0, 4>($5) == 0x151f7c75], comment=Bytes has valid prefix), wtype=string, validate=true) }.returnValue
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract Programs
+{
+  approvalProgram(): bool
+  {
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  BaseContract::clearStateProgram(): bool
+  {
+    return True
+  }
+  
+}
+contract Defaults
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  value(): uint64
+  {
+    return 1
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract ProvidesValue
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  value(): uint64
+  {
+    return 2
+  }
+  
+  fromPrototype(): uint64
+  {
+    return tests/approvals/abstract-methods.algo.ts::RequiresValue.value()
+  }
+  
+  Defaults::value(): uint64
+  {
+    return 1
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

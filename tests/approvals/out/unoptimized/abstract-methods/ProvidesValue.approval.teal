@@ -1,0 +1,159 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock 0x151f7c75
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/abstract-methods.algo.ts:92
+    // export class ProvidesValue extends RequiresValue {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main___algots__.defaultCreate@9
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    // tests/approvals/abstract-methods.algo.ts:92
+    // export class ProvidesValue extends RequiresValue {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@7
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
+    // tests/approvals/abstract-methods.algo.ts:92
+    // export class ProvidesValue extends RequiresValue {
+    txna ApplicationArgs 0
+    pushbytes 0xd557133a // method "value()uint64"
+    pushbytes 0xfc987bd7 // method "fromPrototype()uint64"
+    uncover 2
+    match main_value_route@4 main_fromPrototype_route@5
+    b main_switch_case_next@6
+
+main_switch_case_next@6:
+    b main_after_if_else@8
+
+main_after_if_else@8:
+    b main_after_if_else@10
+
+main_after_if_else@10:
+    // tests/approvals/abstract-methods.algo.ts:92
+    // export class ProvidesValue extends RequiresValue {
+    err
+
+main_fromPrototype_route@5:
+    // tests/approvals/abstract-methods.algo.ts:97
+    // fromPrototype(): uint64 {
+    callsub fromPrototype
+    b main_switch_case_next@6
+
+main_value_route@4:
+    // tests/approvals/abstract-methods.algo.ts:93
+    // value(): uint64 {
+    callsub value
+    b main_switch_case_next@6
+
+main_create_NoOp@7:
+    b main_after_if_else@8
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/abstract-methods.algo.ts:92
+    // export class ProvidesValue extends RequiresValue {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::ProvidesValue.value[routing]() -> void:
+value:
+    b value_block@0
+
+value_block@0:
+    // tests/approvals/abstract-methods.algo.ts:93
+    // value(): uint64 {
+    callsub tests/approvals/abstract-methods.algo.ts::ProvidesValue.value
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::ProvidesValue.fromPrototype[routing]() -> void:
+fromPrototype:
+    b fromPrototype_block@0
+
+fromPrototype_block@0:
+    // tests/approvals/abstract-methods.algo.ts:97
+    // fromPrototype(): uint64 {
+    callsub tests/approvals/abstract-methods.algo.ts::ProvidesValue.fromPrototype
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::ProvidesValue.value() -> uint64:
+tests/approvals/abstract-methods.algo.ts::ProvidesValue.value:
+    b tests/approvals/abstract-methods.algo.ts::ProvidesValue.value_block@0
+
+tests/approvals/abstract-methods.algo.ts::ProvidesValue.value_block@0:
+    // tests/approvals/abstract-methods.algo.ts:94
+    // return 2
+    pushint 2
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::ProvidesValue.fromPrototype() -> uint64:
+tests/approvals/abstract-methods.algo.ts::ProvidesValue.fromPrototype:
+    b tests/approvals/abstract-methods.algo.ts::ProvidesValue.fromPrototype_block@0
+
+tests/approvals/abstract-methods.algo.ts::ProvidesValue.fromPrototype_block@0:
+    // tests/approvals/abstract-methods.algo.ts:98
+    // return RequiresValue.prototype.value()
+    callsub tests/approvals/abstract-methods.algo.ts::Defaults.value
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::Defaults.value() -> uint64:
+tests/approvals/abstract-methods.algo.ts::Defaults.value:
+    b tests/approvals/abstract-methods.algo.ts::Defaults.value_block@0
+
+tests/approvals/abstract-methods.algo.ts::Defaults.value_block@0:
+    // tests/approvals/abstract-methods.algo.ts:84
+    // return 1
+    intc_1 // 1
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::ProvidesValue.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub

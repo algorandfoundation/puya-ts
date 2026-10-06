@@ -1,16 +1,8 @@
 import type ts from 'typescript'
 import { ContractReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
-import type {
-  ContractMethodTarget,
-  Expression,
-  InstanceMethodTarget,
-  InstanceSuperMethodTarget,
-  LValue,
-  MethodConstant,
-  SubroutineID,
-} from '../../awst/nodes'
-import { ARC4ABIMethodConfig } from '../../awst/nodes'
+import type { ContractMethodTarget, Expression, InstanceSuperMethodTarget, LValue, MethodConstant, SubroutineID } from '../../awst/nodes'
+import { ARC4ABIMethodConfig, InstanceMethodTarget } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError } from '../../errors'
 import { codeInvariant } from '../../util'
@@ -67,21 +59,40 @@ export abstract class SubroutineExpressionBuilder extends InstanceBuilder {
  * Invoke a contract method on the current contract (ie. this.someMethod())
  */
 export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder {
-  declare readonly target: ContractMethodTarget
+  declare readonly target: ContractMethodTarget | InstanceMethodTarget
 
   constructor(
     sourceLocation: SourceLocation,
     ptype: FunctionPType,
     public readonly contractType: ContractClassPType,
+    dispatch: 'instance' | 'contract',
   ) {
     super(
       sourceLocation,
       ptype,
-      nodeFactory.contractMethodTarget({
-        cref: ContractReference.fromPType(contractType),
-        memberName: ptype.name,
-      }),
+      // Calls through `this` must follow the concrete contract's MRO,
+      // including when the calling method was inherited from a base class
+      dispatch === 'instance'
+        ? nodeFactory.instanceMethodTarget({ memberName: ptype.name })
+        : nodeFactory.contractMethodTarget({
+            cref: ContractReference.fromPType(contractType),
+            memberName: ptype.name,
+          }),
     )
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
+    // `super.m()` on an abstract method is rejected by the TypeScript checker, but `Base.prototype.m()` is not. Such a call
+    // resolves from `Base` down, so it's only valid if `Base` or one of its bases has a body (e.g. for an `abstract override`)
+    if (this.ptype.isAbstract && !(this.target instanceof InstanceMethodTarget)) {
+      const name = this.ptype.name
+      codeInvariant(
+        [this.contractType, ...this.contractType.allBases()].some((t) => t.methods[name] && !t.methods[name].isAbstract),
+        `${this.contractType.name}.${name} is abstract and has no implementation to call. Call it through \`this\` so the concrete contract's implementation is used`,
+        sourceLocation,
+      )
+    }
+    return super.call(args, typeArgs, sourceLocation)
   }
 
   getMethodSelector(sourceLocation = this.sourceLocation): MethodConstant {

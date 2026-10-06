@@ -1,0 +1,151 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock 0x151f7c75
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/abstract-methods.algo.ts:60
+    // export class Caller extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main___algots__.defaultCreate@5
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    // tests/approvals/abstract-methods.algo.ts:60
+    // export class Caller extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x17d8b7e0 // method "callLabel(uint64)string"
+    uncover 1
+    match main_callLabel_route@3
+    b main_switch_case_next@4
+
+main_switch_case_next@4:
+    b main_after_if_else@6
+
+main_after_if_else@6:
+    // tests/approvals/abstract-methods.algo.ts:60
+    // export class Caller extends Contract {
+    err
+
+main_callLabel_route@3:
+    // tests/approvals/abstract-methods.algo.ts:61
+    // callLabel(appId: Application): string {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    &&
+    assert
+    callsub callLabel
+    b main_switch_case_next@4
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/abstract-methods.algo.ts:60
+    // export class Caller extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Caller.callLabel[routing]() -> void:
+callLabel:
+    b callLabel_block@0
+
+callLabel_block@0:
+    // tests/approvals/abstract-methods.algo.ts:61
+    // callLabel(appId: Application): string {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/abstract-methods.algo.ts::Caller.callLabel
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Caller.callLabel(appId: uint64) -> bytes:
+tests/approvals/abstract-methods.algo.ts::Caller.callLabel:
+    // tests/approvals/abstract-methods.algo.ts:61
+    // callLabel(appId: Application): string {
+    proto 1 1
+    b tests/approvals/abstract-methods.algo.ts::Caller.callLabel_block@0
+
+tests/approvals/abstract-methods.algo.ts::Caller.callLabel_block@0:
+    // tests/approvals/abstract-methods.algo.ts:62
+    // return abiCall<typeof Base.prototype.label>({ appId }).returnValue
+    itxn_begin
+    frame_dig -1
+    itxn_field ApplicationID
+    pushbytes 0x8a8e99db // method "label()string"
+    itxn_field ApplicationArgs
+    pushint 6 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b tests/approvals/abstract-methods.algo.ts::Caller.callLabel_next_txn@1
+
+tests/approvals/abstract-methods.algo.ts::Caller.callLabel_next_txn@1:
+    // tests/approvals/abstract-methods.algo.ts:62
+    // return abiCall<typeof Base.prototype.label>({ appId }).returnValue
+    itxn_submit
+    itxn LastLog
+    dup
+    extract 4 0
+    cover 1
+    extract 0 4
+    bytec_0 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    pushint 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for string
+    extract 2 0
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::Caller.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub

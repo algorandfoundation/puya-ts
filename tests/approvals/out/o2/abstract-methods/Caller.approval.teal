@@ -1,0 +1,76 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    bytecblock 0x151f7c75
+    // tests/approvals/abstract-methods.algo.ts:60
+    // export class Caller extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0x17d8b7e0 // method "callLabel(uint64)string"
+    txna ApplicationArgs 0
+    match main_callLabel_route@3
+    err
+
+main_callLabel_route@3:
+    // tests/approvals/abstract-methods.algo.ts:61
+    // callLabel(appId: Application): string {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/abstract-methods.algo.ts:62
+    // return abiCall<typeof Base.prototype.label>({ appId }).returnValue
+    itxn_begin
+    itxn_field ApplicationID
+    pushbytes 0x8a8e99db // method "label()string"
+    itxn_field ApplicationArgs
+    pushint 6 // appl
+    itxn_field TypeEnum
+    pushint 0
+    itxn_field Fee
+    itxn_submit
+    itxn LastLog
+    dup
+    extract 4 0
+    swap
+    extract 0 4
+    bytec_0 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    dup
+    pushint 0
+    extract_uint16 // on error: invalid array length header
+    pushint 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for string
+    // tests/approvals/abstract-methods.algo.ts:61
+    // callLabel(appId: Application): string {
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    pushint 1
+    return
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/abstract-methods.algo.ts:60
+    // export class Caller extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
