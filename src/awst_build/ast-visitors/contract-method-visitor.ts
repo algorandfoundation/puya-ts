@@ -8,6 +8,7 @@ import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant, isIn, sameSets } from '../../util'
+import { checkAbstractAbiImplementation } from '../arc4-util'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
 import { requireExpressionOfType } from '../eb/util'
@@ -60,12 +61,17 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
 
     const modifiers = this.parseMemberModifiers(node)
 
-    const arc4MethodConfig = this.buildArc4Config({
-      functionType: this._functionType,
-      decorator,
-      modifiers,
-      methodLocation: sourceLocation,
-    })
+    // Abstract methods can't be decorated, so an abstract override keeps the ARC4 config of the method it overrides
+    const arc4MethodConfig =
+      (this._functionType.isAbstract ? this.getOverriddenArc4Config() : undefined) ??
+      this.buildArc4Config({
+        functionType: this._functionType,
+        decorator,
+        modifiers,
+        methodLocation: sourceLocation,
+      })
+
+    if (!modifiers.isStatic) this.validateAbstractAbiImplementation(arc4MethodConfig, sourceLocation)
 
     if (arc4MethodConfig)
       this.context.addArc4Config({
@@ -108,6 +114,34 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
 
   public static buildContractMethod(node: ts.MethodDeclaration, contractType: ContractClassPType): () => ContractMethod | undefined {
     return visitInChildContext(this, node, contractType)
+  }
+
+  private getOverriddenArc4Config(): ARC4MethodConfig | undefined {
+    for (const base of this._contractType.baseTypes) {
+      const config = this.context.getArc4Config(base, this._functionType.name)
+      if (config) return config
+    }
+    return undefined
+  }
+
+  /**
+   * A method implementing an abstract ABI method must keep the declaration's selector.
+   * With multi-inheritance, the implementation can come from a base that doesn't extend the
+   * declaring class. This visitor never pairs those two, so ContractVisitor checks them instead
+   */
+  private validateAbstractAbiImplementation(config: ARC4MethodConfig | null, sourceLocation: SourceLocation) {
+    const { name } = this._functionType
+    for (const base of this._contractType.allBases()) {
+      const declaration = base.methods[name]
+      if (!declaration?.isAbstract || declaration.declaredIn?.fullName !== base.fullName) continue
+      const declarationConfig = this.context.getArc4Config(base, name)
+      if (!(declarationConfig instanceof ARC4ABIMethodConfig)) continue
+      checkAbstractAbiImplementation({
+        declaration: { name: `${base.name}.${name}`, type: declaration, config: declarationConfig },
+        implementation: { name: `${this._contractType.name}.${name}`, type: this._functionType, config },
+        sourceLocation,
+      })
+    }
   }
 
   private buildArc4Config({
