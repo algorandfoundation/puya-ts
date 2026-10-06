@@ -19,12 +19,22 @@ export abstract class Second extends Contract {
   }
 
   @abimethod()
+  doubleBalance(id: arc4.Uint<64>): arc4.Uint<64> {
+    err('stub only')
+  }
+
+  @abimethod()
   getEmpty(id: arc4.Uint<64>): Entry {
     err('stub only')
   }
 
   @abimethod()
   describe(): arc4.Str {
+    err('stub only')
+  }
+
+  @abimethod()
+  summary(id: arc4.Uint<64>): arc4.Tuple<readonly [arc4.Str, arc4.Uint<64>]> {
     err('stub only')
   }
 }

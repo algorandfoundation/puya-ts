@@ -3,40 +3,104 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#0: bool = tests/approvals/abstract-methods.algo.ts::Second.__puya_arc4_router__()
         return tmp%0#0
 
+subroutine _puya_lib.arc4.dynamic_array_read_dynamic_element(array: bytes, index: uint64) -> bytes:
+    block@0: // L134
+        let tmp%0#0: bytes = ((extract 2 0) array#0)
+        let tmp%1#0: uint64 = (extract_uint16 array#0 0u)
+        let tmp%2#0: bytes = _puya_lib.arc4.static_array_read_dynamic_element(tmp%0#0, index#0, tmp%1#0)
+        return tmp%2#0
+
+subroutine _puya_lib.arc4.static_array_read_dynamic_element(array_head_and_tail: bytes, index: uint64, array_length: uint64) -> bytes:
+    block@0: // L144
+        let tmp%0#0: uint64 = (* index#0 2u)
+        let tmp%1#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%0#0)
+        let item_start_offset#0: uint64 = tmp%1#0
+        let tmp%2#0: uint64 = (len array_head_and_tail#0)
+        let end_of_tail#0: uint64 = tmp%2#0
+        let tmp%3#0: uint64 = (+ index#0 1u)
+        let next_index#0: uint64 = tmp%3#0
+        let tmp%4#0: uint64 = (* next_index#0 2u)
+        let tmp%5#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%4#0)
+        let next_item_offset#0: uint64 = tmp%5#0
+        let tmp%6#0: uint64 = (- array_length#0 next_index#0)
+        let is_before_end#0: uint64 = tmp%6#0
+        let tmp%7#0: uint64 = (select end_of_tail#0 next_item_offset#0 is_before_end#0)
+        let item_end_offset#0: uint64 = tmp%7#0
+        let tmp%8#0: bytes = (substring3 array_head_and_tail#0 item_start_offset#0 item_end_offset#0)
+        return tmp%8#0
+
+subroutine _puya_lib.arc4.dynamic_array_read_byte_length_element(array: bytes, index: uint64) -> bytes:
+    block@0: // L158
+        let tmp%0#0: bytes = ((extract 2 0) array#0)
+        let array_head_and_tail#0: bytes = tmp%0#0
+        let tmp%1#0: uint64 = (* index#0 2u)
+        let tmp%2#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%1#0)
+        let item_start_offset#0: uint64 = tmp%2#0
+        let tmp%3#0: uint64 = (extract_uint16 array_head_and_tail#0 item_start_offset#0)
+        let item_length#0: uint64 = tmp%3#0
+        let tmp%4#0: uint64 = (+ item_length#0 2u)
+        let tmp%5#0: bytes = (extract3 array_head_and_tail#0 item_start_offset#0 tmp%4#0)
+        return tmp%5#0
+
+subroutine _puya_lib.arc4.static_array_read_byte_length_element(array: bytes, index: uint64) -> bytes:
+    block@0: // L167
+        let tmp%0#0: uint64 = (* index#0 2u)
+        let tmp%1#0: uint64 = (extract_uint16 array#0 tmp%0#0)
+        let item_start_offset#0: uint64 = tmp%1#0
+        let tmp%2#0: uint64 = (extract_uint16 array#0 item_start_offset#0)
+        let item_length#0: uint64 = tmp%2#0
+        let tmp%3#0: uint64 = (+ item_length#0 2u)
+        let tmp%4#0: bytes = (extract3 array#0 item_start_offset#0 tmp%3#0)
+        return tmp%4#0
+
+subroutine _puya_lib.arc4.dynamic_assert_index(array: bytes, index: uint64) -> void:
+    block@0: // L419
+        let tmp%0#0: uint64 = (extract_uint16 array#0 0u)
+        let length#0: uint64 = tmp%0#0
+        let tmp%1#0: bool = (< index#0 length#0)
+        (assert tmp%1#0) // index out of bounds
+        return 
+
 subroutine tests/approvals/abstract-methods.algo.ts::Second.__puya_arc4_router__() -> bool:
-    block@0: // L35
+    block@0: // L45
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
-        goto tmp%1#0 ? block@1 : block@10
-    block@1: // abi_routing_L35
+        goto tmp%1#0 ? block@1 : block@12
+    block@1: // abi_routing_L45
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
         (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
-        goto tmp%5#0 ? block@2 : block@8
-    block@2: // call_NoOp_L35
+        goto tmp%5#0 ? block@2 : block@10
+    block@2: // call_NoOp_L45
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%6#0 {method "label()string" => block@3, method "firstLabel()string" => block@4, method "getEmpty(uint64)(uint64,uint64)" => block@5, method "describe()string" => block@6, * => block@7}
-    block@3: // label_route_L40
+        switch tmp%6#0 {method "label()string" => block@3, method "firstLabel()string" => block@4, method "doubleBalance(uint64)uint64" => block@5, method "getEmpty(uint64)(uint64,uint64)" => block@6, method "describe()string" => block@7, method "summary(uint64)(string,uint64)" => block@8, * => block@9}
+    block@3: // label_route_L50
         tests/approvals/abstract-methods.algo.ts::Second.label[routing]()
-        goto block@7
-    block@4: // firstLabel_route_L44
+        goto block@9
+    block@4: // firstLabel_route_L54
         tests/approvals/abstract-methods.algo.ts::Second.firstLabel[routing]()
-        goto block@7
-    block@5: // getEmpty_route_L12
+        goto block@9
+    block@5: // doubleBalance_route_L29
+        tests/approvals/abstract-methods.algo.ts::Intermediate.doubleBalance[routing]()
+        goto block@9
+    block@6: // getEmpty_route_L12
         tests/approvals/abstract-methods.algo.ts::Base.getEmpty[routing]()
-        goto block@7
-    block@6: // describe_route_L16
+        goto block@9
+    block@7: // describe_route_L16
         tests/approvals/abstract-methods.algo.ts::Base.describe[routing]()
-        goto block@7
-    block@7: // switch_case_next_L35
         goto block@9
-    block@8: // create_NoOp_L35
+    block@8: // summary_route_L21
+        tests/approvals/abstract-methods.algo.ts::Base.summary[routing]()
         goto block@9
-    block@9: // after_if_else_L35
+    block@9: // switch_case_next_L45
         goto block@11
-    block@10: // __algots__.defaultCreate_L35
+    block@10: // create_NoOp_L45
+        goto block@11
+    block@11: // after_if_else_L45
+        goto block@13
+    block@12: // __algots__.defaultCreate_L45
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 NoOp)
         let tmp%9#0: uint64 = (txn ApplicationID)
@@ -45,11 +109,11 @@ subroutine tests/approvals/abstract-methods.algo.ts::Second.__puya_arc4_router__
         (assert tmp%11#0)
         tests/approvals/abstract-methods.algo.ts::Second.__algots__.defaultCreate()
         exit 1u
-    block@11: // after_if_else_L35
+    block@13: // after_if_else_L45
         exit 0u
 
 subroutine tests/approvals/abstract-methods.algo.ts::Second.label[routing]() -> void:
-    block@0: // L40
+    block@0: // L50
         let tmp%0#0: string = tests/approvals/abstract-methods.algo.ts::Second.label()
         let tmp%1#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>(tmp%0#0)
         let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
@@ -57,11 +121,25 @@ subroutine tests/approvals/abstract-methods.algo.ts::Second.label[routing]() -> 
         exit 1u
 
 subroutine tests/approvals/abstract-methods.algo.ts::Second.firstLabel[routing]() -> void:
-    block@0: // L44
+    block@0: // L54
         let tmp%0#0: string = tests/approvals/abstract-methods.algo.ts::Second.firstLabel()
         let tmp%1#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>(tmp%0#0)
         let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
         (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/abstract-methods.algo.ts::Intermediate.doubleBalance[routing]() -> void:
+    block@0: // L29
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%0#0)
+        let tmp%2#0: uint64 = tests/approvals/abstract-methods.algo.ts::Intermediate.doubleBalance(tmp%1#0)
+        let tmp%3#0: Encoded(uint64) = bytes_encode<uint64>(tmp%2#0)
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
         exit 1u
 
 subroutine tests/approvals/abstract-methods.algo.ts::Base.getEmpty[routing]() -> void:
@@ -85,23 +163,44 @@ subroutine tests/approvals/abstract-methods.algo.ts::Base.describe[routing]() ->
         (log tmp%2#0)
         exit 1u
 
+subroutine tests/approvals/abstract-methods.algo.ts::Base.summary[routing]() -> void:
+    block@0: // L21
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%0#0)
+        let tmp%2#0: Encoded((len+utf8[]),uint64) = tests/approvals/abstract-methods.algo.ts::Base.summary(tmp%1#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
 subroutine tests/approvals/abstract-methods.algo.ts::Second.empty(id: uint64) -> Encoded(uint64,uint64):
-    block@0: // L36
+    block@0: // L46
         let tmp%0#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(id#0, 20u)
         return tmp%0#0
 
 subroutine tests/approvals/abstract-methods.algo.ts::Second.label() -> string:
-    block@0: // L40
+    block@0: // L50
         return "second"
 
 subroutine tests/approvals/abstract-methods.algo.ts::Second.firstLabel() -> string:
-    block@0: // L44
+    block@0: // L54
         let tmp%0#0: string = tests/approvals/abstract-methods.algo.ts::First.label()
         return tmp%0#0
 
 subroutine tests/approvals/abstract-methods.algo.ts::First.label() -> string:
-    block@0: // L29
+    block@0: // L39
         return "first"
+
+subroutine tests/approvals/abstract-methods.algo.ts::Intermediate.doubleBalance(id: uint64) -> uint64:
+    block@0: // L29
+        let tmp%0#0: Encoded(uint64,uint64) = tests/approvals/abstract-methods.algo.ts::Second.empty(id#0)
+        let tuple_item%0#0: Encoded(uint64) = extract_value(tmp%0#0, 1)
+        let tmp%1#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tmp%2#0: uint64 = (* tmp%1#0 2u)
+        return tmp%2#0
 
 subroutine tests/approvals/abstract-methods.algo.ts::Base.getEmpty(id: uint64) -> Encoded(uint64,uint64):
     block@0: // L12
@@ -113,6 +212,15 @@ subroutine tests/approvals/abstract-methods.algo.ts::Base.describe() -> string:
         let tmp%0#0: string = tests/approvals/abstract-methods.algo.ts::Second.label()
         return tmp%0#0
 
+subroutine tests/approvals/abstract-methods.algo.ts::Base.summary(id: uint64) -> Encoded((len+utf8[]),uint64):
+    block@0: // L21
+        let tmp%0#0: string = tests/approvals/abstract-methods.algo.ts::Second.label()
+        let tmp%1#0: Encoded(uint64,uint64) = tests/approvals/abstract-methods.algo.ts::Second.empty(id#0)
+        let tuple_item%0#0: Encoded(uint64) = extract_value(tmp%1#0, 1)
+        let tmp%2#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tmp%3#0: Encoded((len+utf8[]),uint64) = bytes_encode<((len+utf8[]),uint64)>(tmp%0#0, tmp%2#0)
+        return tmp%3#0
+
 subroutine tests/approvals/abstract-methods.algo.ts::Second.__algots__.defaultCreate() -> void:
-    block@0: // L35
+    block@0: // L45
         return 

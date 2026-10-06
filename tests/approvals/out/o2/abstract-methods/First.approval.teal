@@ -3,55 +3,122 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    // tests/approvals/abstract-methods.algo.ts:24
+    intcblock 8 1 10
+    bytecblock 0x151f7c75
+    // tests/approvals/abstract-methods.algo.ts:34
     // export class First extends Intermediate {
     txn NumAppArgs
-    bz main___algots__.defaultCreate@10
+    bz main___algots__.defaultCreate@12
     txn OnCompletion
     !
     assert
     txn ApplicationID
     assert
-    pushbytess 0x8a8e99db 0x82685c0e 0x2cb25118 // method "label()string", method "getEmpty(uint64)(uint64,uint64)", method "describe()string"
+    pushbytess 0x8a8e99db 0x6a8b798a 0x82685c0e 0x2cb25118 0x5d21aa45 // method "label()string", method "doubleBalance(uint64)uint64", method "getEmpty(uint64)(uint64,uint64)", method "describe()string", method "summary(uint64)(string,uint64)"
     txna ApplicationArgs 0
-    match main_label_route@4 main_getEmpty_route@5 main_label_route@4
+    match main_label_route@4 main_doubleBalance_route@5 main_getEmpty_route@6 main_label_route@4 main_summary_route@8
     err
 
+main_summary_route@8:
+    // tests/approvals/abstract-methods.algo.ts:21
+    // summary(id: uint64): [string, uint64] {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/abstract-methods.algo.ts:36
+    // return { id, balance: 10 }
+    itob
+    intc_2 // 10
+    itob
+    concat
+    // tests/approvals/abstract-methods.algo.ts:22
+    // return [this.label(), this.empty(id).balance]
+    extract 8 8
+    pushbytes 0x000a
+    swap
+    concat
+    pushbytes 0x00056669727374
+    concat
+    // tests/approvals/abstract-methods.algo.ts:21
+    // summary(id: uint64): [string, uint64] {
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
 main_label_route@4:
-    // tests/approvals/abstract-methods.algo.ts:29
+    // tests/approvals/abstract-methods.algo.ts:39
     // label(): string {
     pushbytes 0x151f7c7500056669727374
     log
-    pushint 1
+    intc_1 // 1
     return
 
-main_getEmpty_route@5:
+main_getEmpty_route@6:
     // tests/approvals/abstract-methods.algo.ts:12
     // getEmpty(id: uint64): Entry {
     txna ApplicationArgs 1
     dup
     len
-    pushint 8
+    intc_0 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
-    // tests/approvals/abstract-methods.algo.ts:26
+    // tests/approvals/abstract-methods.algo.ts:36
     // return { id, balance: 10 }
     itob
-    pushint 10
+    intc_2 // 10
     itob
     concat
     // tests/approvals/abstract-methods.algo.ts:12
     // getEmpty(id: uint64): Entry {
-    pushbytes 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
-    pushint 1
+    intc_1 // 1
     return
 
-main___algots__.defaultCreate@10:
-    // tests/approvals/abstract-methods.algo.ts:24
+main_doubleBalance_route@5:
+    // tests/approvals/abstract-methods.algo.ts:29
+    // doubleBalance(id: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/abstract-methods.algo.ts:36
+    // return { id, balance: 10 }
+    itob
+    intc_2 // 10
+    itob
+    concat
+    // tests/approvals/abstract-methods.algo.ts:30
+    // return this.empty(id).balance * 2
+    intc_0 // 8
+    extract_uint64
+    pushint 2
+    *
+    // tests/approvals/abstract-methods.algo.ts:29
+    // doubleBalance(id: uint64): uint64 {
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main___algots__.defaultCreate@12:
+    // tests/approvals/abstract-methods.algo.ts:34
     // export class First extends Intermediate {
     txn OnCompletion
     !
