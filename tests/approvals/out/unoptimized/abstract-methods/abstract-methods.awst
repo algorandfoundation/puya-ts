@@ -20,6 +20,11 @@ contract First
     return "first"
   }
   
+  Intermediate::doubleBalance(id: uint64): uint64
+  {
+    return this.empty(id).balance * 2
+  }
+  
   Base::getEmpty(id: uint64): tests/approvals/abstract-methods.algo.ts::Entry
   {
     return this.empty(id)
@@ -28,6 +33,11 @@ contract First
   Base::describe(): string
   {
     return this.label()
+  }
+  
+  Base::summary(id: uint64): arc4.tuple<string,uint64>
+  {
+    return ARC4_ENCODE(#[this.label(), this.empty(id).balance], wtype=arc4.tuple<string,uint64>)
   }
   
   __algots__.defaultCreate(): void
@@ -72,6 +82,11 @@ contract Second
     return "first"
   }
   
+  Intermediate::doubleBalance(id: uint64): uint64
+  {
+    return this.empty(id).balance * 2
+  }
+  
   Base::getEmpty(id: uint64): tests/approvals/abstract-methods.algo.ts::Entry
   {
     return this.empty(id)
@@ -80,6 +95,11 @@ contract Second
   Base::describe(): string
   {
     return this.label()
+  }
+  
+  Base::summary(id: uint64): arc4.tuple<string,uint64>
+  {
+    return ARC4_ENCODE(#[this.label(), this.empty(id).balance], wtype=arc4.tuple<string,uint64>)
   }
   
   __algots__.defaultCreate(): void
