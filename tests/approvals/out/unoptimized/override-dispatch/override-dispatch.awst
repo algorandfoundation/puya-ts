@@ -1,0 +1,102 @@
+contract Leaf
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  value(): uint64
+  {
+    return 2
+  }
+  
+  fromSuper(): uint64
+  {
+    return super.value()
+  }
+  
+  Base::value(): uint64
+  {
+    return 1
+  }
+  
+  Base::read(): uint64
+  {
+    return this.value()
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract Multiple
+{
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  fromOther(): uint64
+  {
+    return tests/approvals/override-dispatch.algo.ts::Other.value()
+  }
+  
+  Leaf::value(): uint64
+  {
+    return 2
+  }
+  
+  Leaf::fromSuper(): uint64
+  {
+    return super.value()
+  }
+  
+  Base::value(): uint64
+  {
+    return 1
+  }
+  
+  Base::read(): uint64
+  {
+    return this.value()
+  }
+  
+  Other::value(): uint64
+  {
+    return 3
+  }
+  
+  Other::readOther(): uint64
+  {
+    return this.value()
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  ClusteredContract<tests/approvals/override-dispatch.algo.ts::Leaf,tests/approvals/override-dispatch.algo.ts::Other>::constructor(): void
+  {
+    @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
+    @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}

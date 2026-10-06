@@ -1,52 +1,72 @@
 {
-  "GHSA-mh99-v99m-4gvg": {
+  "GHSA-q2hr-2g5m-vwhr": {
     "active": true,
-    "notes": "brace-expansion DoS. Only remaining copy is node_modules/npm/node_modules/brace-expansion, inside the npm CLI's bundled dependency tree (pulled in by semantic-release > @semantic-release/npm > npm). Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`; npm 12.0.2 still bundles 5.0.7. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm publishes a release bundling brace-expansion >=5.0.9.",
+    "notes": "brace-expansion quadratic-time expansion. Only copy is node_modules/npm/node_modules/brace-expansion (5.0.9), inside the npm CLI's bundled tree via semantic-release > @semantic-release/npm > npm. Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`; npm 11.20.0 (the newest release allowed by min-release-age) and 12.2.0 both still bundle 5.0.9. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles brace-expansion >=5.0.12.",
     "expiry": "2026-11-30"
   },
-  "GHSA-rgw5-rvv9-x895": {
+  "GHSA-qhr7-859c-m2p7": {
     "active": true,
-    "notes": "brace-expansion DoS (bypass of the CVE-2026-14257 mitigation). Same single path as GHSA-mh99-v99m-4gvg: npm's bundled tree via @semantic-release/npm, not overridable, release-time tooling only. Remove once npm bundles brace-expansion >=5.0.9.",
+    "notes": "brace-expansion DoS via uncontrolled recursion. Only copy is node_modules/npm/node_modules/brace-expansion (5.0.9), inside the npm CLI's bundled tree via semantic-release > @semantic-release/npm > npm. Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`; npm 11.20.0 (the newest release allowed by min-release-age) and 12.2.0 both still bundle 5.0.9. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles brace-expansion >=5.0.12.",
     "expiry": "2026-11-30"
   },
-  "GHSA-mwp4-54f8-5fhr": {
+  "GHSA-6j4f-fj2g-mc7p": {
     "active": true,
-    "notes": "ip-address leading-zero octet SSRF bypass. Only copy is node_modules/npm/node_modules/ip-address (npm CLI bundled tree via @semantic-release/npm); npm 12.0.2 still bundles 10.2.0 and bundled deps cannot be overridden. We do not parse untrusted addresses. Remove once npm bundles ip-address >10.3.0.",
+    "notes": "brace-expansion DoS via uncontrolled recursion. Only copy is node_modules/npm/node_modules/brace-expansion (5.0.9), inside the npm CLI's bundled tree via semantic-release > @semantic-release/npm > npm. Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`; npm 11.20.0 (the newest release allowed by min-release-age) and 12.2.0 both still bundle 5.0.9. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles brace-expansion >=5.0.12.",
     "expiry": "2026-11-30"
   },
-  "GHSA-4xrf-jv44-h6hh": {
+  "GHSA-rpw4-54j3-4h4q": {
     "active": true,
-    "notes": "ip-address CIDR-suffix special-use misclassification. Same single path as GHSA-mwp4-54f8-5fhr: npm's bundled tree, not overridable. Remove once npm bundles a patched ip-address.",
+    "notes": "ip-address Address6.isLinkLocal() misclassification. We do not parse untrusted addresses. Only copy is node_modules/npm/node_modules/ip-address (10.5.0), inside the npm CLI's bundled tree via semantic-release > @semantic-release/npm > npm. Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`; npm 11.20.0 (the newest release allowed by min-release-age) and 12.2.0 both still bundle 10.5.0. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles ip-address >10.7.0.",
     "expiry": "2026-11-30"
   },
-  "GHSA-22jq-vg5j-6vgg": {
+  "GHSA-2vr4-cq9g-pvrc": {
     "active": true,
-    "notes": "ip-address IPv4-mapped/NAT64 misclassification. Same single path as GHSA-mwp4-54f8-5fhr: npm's bundled tree, not overridable. Remove once npm bundles a patched ip-address.",
+    "notes": "ip-address NAT64 prefix not recognised by any classifier. We do not parse untrusted addresses. Only copy is node_modules/npm/node_modules/ip-address (10.5.0), inside the npm CLI's bundled tree via semantic-release > @semantic-release/npm > npm. Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`; npm 11.20.0 (the newest release allowed by min-release-age) and 12.2.0 both still bundle 10.5.0. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles ip-address >10.7.0.",
     "expiry": "2026-11-30"
   },
-  "GHSA-r292-9mhp-454m": {
+  "GHSA-j6r3-76f7-8jcv": {
     "active": true,
-    "notes": "node-tar stack-overflow DoS via crafted long-path archives. The direct `tar` dependency is already on a patched version; the flagged copy is node_modules/npm/node_modules/tar (npm CLI bundled tree via @semantic-release/npm), which npm 12.0.2 still ships at 7.5.19 and which `overrides` cannot rewrite. Remove once npm bundles tar >=7.5.21.",
+    "notes": "ip-address isInSubnet()/isHostInSubnet() misclassification. We do not parse untrusted addresses. Only copy is node_modules/npm/node_modules/ip-address (10.5.0), inside the npm CLI's bundled tree via semantic-release > @semantic-release/npm > npm. Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`; npm 11.20.0 (the newest release allowed by min-release-age) and 12.2.0 both still bundle 10.5.0. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles ip-address >10.7.0.",
     "expiry": "2026-11-30"
   },
-  "GHSA-8xcm-r25x-g524": {
+  "GHSA-h3mg-xc3c-68pw": {
     "active": true,
-    "notes": "undici response desynchronization via retry interceptor. The top-level undici is pinned to 6.28.0 (patched) via `overrides`; the flagged copy is node_modules/npm/node_modules/undici, inside npm's bundled tree (npm > node-gyp), still 6.27.0 in npm 12.0.2 and not overridable. Remove once npm bundles undici >=6.28.0.",
+    "notes": "ip-address Address6 parse diagnostic issue. We do not parse untrusted addresses. Only copy is node_modules/npm/node_modules/ip-address (10.5.0), inside the npm CLI's bundled tree via semantic-release > @semantic-release/npm > npm. Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`; npm 11.20.0 (the newest release allowed by min-release-age) and 12.2.0 both still bundle 10.5.0. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles ip-address >10.7.0.",
     "expiry": "2026-11-30"
   },
-  "GHSA-m8rv-5g2x-5cg5": {
+  "GHSA-3wwx-pv8p-q78v": {
     "active": true,
-    "notes": "undici CRLF injection via blob-like body 'type'. Same single path as GHSA-8xcm-r25x-g524: npm's bundled undici 6.27.0, not overridable. Top-level undici is already pinned to the patched 6.28.0.",
+    "notes": "undici DoS. The top-level undici is pinned to the patched 6.28.1 via `overrides`. Only copy is node_modules/npm/node_modules/undici (6.28.0), inside the npm CLI's bundled tree via semantic-release > @semantic-release/npm > npm. Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`; npm 11.20.0 (the newest release allowed by min-release-age) and 12.2.0 both still bundle 6.28.0. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles undici >=6.28.1.",
     "expiry": "2026-11-30"
   },
-  "GHSA-v3r7-h72x-cjcm": {
+  "GHSA-r53p-7pc4-xj5r": {
     "active": true,
-    "notes": "undici cookie attribute injection. Same single path as GHSA-8xcm-r25x-g524: npm's bundled undici 6.27.0, not overridable. Top-level undici is already pinned to the patched 6.28.0.",
+    "notes": "undici downstream response splitting. The top-level undici is pinned to the patched 6.28.1 via `overrides`. Only copy is node_modules/npm/node_modules/undici (6.28.0), inside the npm CLI's bundled tree via semantic-release > @semantic-release/npm > npm. Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`; npm 11.20.0 (the newest release allowed by min-release-age) and 12.2.0 both still bundle 6.28.0. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles undici >=6.28.1.",
     "expiry": "2026-11-30"
   },
-  "GHSA-2v37-7h3g-55p8": {
+  "GHSA-rfgv-xxqx-mfg5": {
     "active": true,
-    "notes": "nanoid infinite loop with custom generator and size 0. Dev-only transitive dep via vitest > vite > postcss; nanoid custom generators are not used. Remove once postcss pulls a patched nanoid.",
+    "notes": "undici DoS. The top-level undici is pinned to the patched 6.28.1 via `overrides`. Only copy is node_modules/npm/node_modules/undici (6.28.0), inside the npm CLI's bundled tree via semantic-release > @semantic-release/npm > npm. Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`; npm 11.20.0 (the newest release allowed by min-release-age) and 12.2.0 both still bundle 6.28.0. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles undici >=6.28.1.",
+    "expiry": "2026-11-30"
+  },
+  "GHSA-vfj7-8cjw-p6xm": {
+    "active": true,
+    "notes": "braces stack-exhaustion DoS through deeply nested patterns. No patched release exists (every version <=3.0.3 is affected and 3.0.3 is the latest); npm's suggested fix is a major downgrade that only drops the dependency. Only path is semantic-release > @semantic-release/commit-analyzer > micromatch > braces: release-time tooling matching our own commit messages, never reachable from compiler or runtime code. Remove once braces publishes a fix.",
+    "expiry": "2026-11-30"
+  },
+  "GHSA-ch52-4w7c-c8xp": {
+    "active": true,
+    "notes": "http-cache-semantics max-stale handling can disclose cross-user cached responses. No patched release exists (every version <=4.2.0 is affected). Only copy is node_modules/npm/node_modules/http-cache-semantics (4.2.0), inside the npm CLI's bundled tree via semantic-release > @semantic-release/npm > npm; npm 11.20.0 through 12.2.0 all bundle 4.2.0 and `overrides` cannot reach bundled deps. Release-time tooling only, with no shared HTTP cache across users. Remove once npm bundles a patched http-cache-semantics.",
+    "expiry": "2026-11-30"
+  },
+  "GHSA-68fv-2mgg-jv7q": {
+    "active": true,
+    "notes": "source-map-js event-loop DoS through indexed source-map section offsets. Only copy is node_modules/source-map-js (1.2.1), via vitest > vite and @vitest/coverage-v8 > magicast. The fix (1.2.2, published 2026-09-30) is still inside min-release-age; bump it via `overrides` once it clears on 2026-10-07. Test tooling only, never reachable from compiler or runtime code.",
+    "expiry": "2026-11-30"
+  },
+  "GHSA-rj75-hqrm-r3gf": {
+    "active": true,
+    "notes": "postcss-selector-parser quadratic-time selector parsing. Only copy is node_modules/npm/node_modules/postcss-selector-parser (7.1.4), inside the npm CLI's bundled tree via semantic-release > @semantic-release/npm > npm. Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`; npm 11.20.0 and 11.21.0 both still bundle 7.1.4. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles postcss-selector-parser >=7.1.6.",
     "expiry": "2026-11-30"
   }
 }
