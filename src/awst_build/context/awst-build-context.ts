@@ -7,6 +7,7 @@ import { SourceLocation } from '../../awst/source-location'
 import { logger } from '../../logger'
 import type { CompileOptions } from '../../options'
 import { invariant } from '../../util'
+import { uint8ArrayToHex } from '../../util/base-16'
 import { AbsolutePath } from '../../util/absolute-path'
 import { DefaultMap } from '../../util/default-map'
 import { ConstantStore } from '../constant-store'
@@ -330,6 +331,8 @@ class AwstBuildContextImpl extends AwstBuildContext {
 
   getStorageDefinitionsForContract(contractType: ContractClassPType): AppStorageDefinition[] {
     const result = new Map<string, AppStorageDefinition>()
+    // Keys share one namespace per storage kind (global, local, box), so track owners per kind
+    const keyOwners = new Map<string, AppStorageDefinition>()
     for (const ct of this.iterateContractHierarchy(contractType)) {
       for (const [memberName, declaration] of this.storageDeclarations.get(ct.fullName) ?? []) {
         if (result.has(memberName)) {
@@ -338,7 +341,18 @@ class AwstBuildContextImpl extends AwstBuildContext {
             `Redefinition of app storage member, original declared in ${declaration.sourceLocation}`,
           )
         }
-        result.set(memberName, declaration.definition)
+        const definition = declaration.definition
+        const keyId = `${definition.kind}:${uint8ArrayToHex(definition.key.value)}`
+        const keyOwner = keyOwners.get(keyId)
+        if (keyOwner && keyOwner.memberName !== memberName) {
+          logger.error(
+            keyOwner.sourceLocation,
+            `Storage key ${describeStorageKey(definition.key.value)} is used by more than one member: ${keyOwner.memberName} and ${memberName}, declared in ${declaration.sourceLocation}`,
+          )
+        } else {
+          keyOwners.set(keyId, definition)
+        }
+        result.set(memberName, definition)
       }
     }
     return Array.from(result.values())
@@ -356,5 +370,13 @@ class AwstBuildContextImpl extends AwstBuildContext {
 
   get compilationSet() {
     return this.#compilationSet
+  }
+}
+
+function describeStorageKey(value: Uint8Array): string {
+  try {
+    return JSON.stringify(new TextDecoder('utf-8', { fatal: true }).decode(value))
+  } catch {
+    return `0x${uint8ArrayToHex(value)}`
   }
 }
