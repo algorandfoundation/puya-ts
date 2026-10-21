@@ -263,7 +263,39 @@ class CountByTen extends Counter {
 
 Only concrete contracts produce compilation artifacts, and they must implement every inherited abstract method. An abstract method has no implementation, so it cannot be called through `super` or a class prototype (e.g. `Counter.prototype.step()`), unless it redeclares an inherited method as `abstract override`, in which case the inherited implementation is called, as it is in TypeScript. Public abstract methods on an ARC4 contract can still be referenced by `arc4.abiCall` and `arc4.methodSelector`, which use the declaration's signature and default ABI name. Since TypeScript does not allow decorators on abstract methods, apply any decorators to the concrete implementation.
 
-Method signatures and storage types **must** still be concrete Algorand TypeScript types (parametric types are not supported as of today).
+### Generic contracts
+
+An abstract contract can declare type parameters, which can then be used anywhere a type can, including in storage, method signatures and ABI methods. Contracts extending it supply concrete type arguments.
+
+```ts
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import { Contract, GlobalState } from '@algorandfoundation/algorand-typescript'
+
+abstract class Store<T> extends Contract {
+  stored = GlobalState<T>()
+
+  set(value: T): void {
+    this.stored.value = value
+  }
+
+  get(): T {
+    return this.stored.value
+  }
+}
+
+class UintStore extends Store<uint64> {}
+
+class StringStore extends Store<string> {}
+```
+
+A generic contract is compiled separately for each distinct set of type arguments it is extended with, with each type parameter replaced by its type argument. In the example above, `UintStore` has the ABI methods `set(uint64)void` and `get()uint64`, and `StringStore` has `set(string)void` and `get()string`. In the compiled output, its methods are named after the type arguments (e.g. `Store<uint64>.get`).
+
+- Generic contracts must be `abstract`, as they can't be compiled without type arguments.
+- A generic contract can extend another, passing on its type parameters (e.g. `abstract class Keyed<V> extends Pair<string, V>`), and can be combined with other contracts using polytype.
+- To reference a generic contract directly, supply its type arguments (e.g. `super.class(Pair<uint64, boolean>)`, or `(Keyed<uint64>).prototype.keyed`, where TypeScript requires the parentheses).
+- Explicit references (e.g. `(Keyed<uint64>).prototype.keyed` or an alias such as `const UintKeyed = Keyed<uint64>`) preserve their supplied type arguments. To obtain an ABI method selector, that instantiation must be extended by a contract being compiled.
+- Distinct type arguments can share a name, such as types declared with the same name in different modules. Their instantiations are kept separate, and named by the type arguments' names (e.g. `Store<Entry>`). If two different type arguments would give an instantiation the same name, compilation fails and one of the types must be renamed.
+- TypeScript checks generic contract bodies even if no contract extends them. AlgoTS body checks run for each concrete instantiation, and errors are reported for the instantiation that causes them. A generic contract which no contract extends is not compiled, and a warning is logged instead (only informational if it is exported, as contracts in other projects may extend it).
 
 ### Multi-inheritance
 
