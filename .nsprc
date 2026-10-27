@@ -1,67 +1,32 @@
 {
-  "GHSA-vfj7-8cjw-p6xm": {
+  "GHSA-rxp7-6hxx-x8q5": {
     "active": true,
-    "notes": "braces stack-exhaustion DoS via deeply nested patterns. No patched release exists (all versions affected). Dev-only transitive dep via shx > shelljs > fast-glob > micromatch (and semantic-release > micromatch); only ever fed our own static glob patterns. Remove once a patched braces is published.",
+    "notes": "ip-address quadratic-time Address6 zone identifier matching. We do not parse untrusted addresses. Only copy is node_modules/npm/node_modules/ip-address (10.7.2), inside the npm CLI's bundled dependency tree (pulled in by semantic-release > @semantic-release/npm > npm, overridden to 11.21.1). Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles ip-address >10.7.3.",
     "expiry": "2026-11-30"
   },
-  "GHSA-q2hr-2g5m-vwhr": {
+  "GHSA-4qv8-2p9j-2685": {
     "active": true,
-    "notes": "brace-expansion quadratic-time `{a},b}` rewrite CPU DoS. Only copy is node_modules/npm/node_modules/brace-expansion (5.0.9), inside the npm CLI's bundled dependency tree (pulled in by semantic-release > @semantic-release/npm > npm, overridden to 11.21.0). Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles brace-expansion >5.0.11.",
+    "notes": "undici EventSource parser unbounded memory DoS. The top-level undici is pinned to the patched 6.29.1 via `overrides`; the only flagged copy is node_modules/npm/node_modules/undici (6.29.0, via npm > node-gyp), inside the npm CLI's bundled dependency tree (pulled in by semantic-release > @semantic-release/npm > npm, overridden to 11.21.1). Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles undici >=6.29.1.",
     "expiry": "2026-11-30"
   },
-  "GHSA-qhr7-859c-m2p7": {
+  "GHSA-xjj6-f33q-929c": {
     "active": true,
-    "notes": "brace-expansion uncontrolled recursion on nested brace groups. Same single path as GHSA-q2hr-2g5m-vwhr.",
+    "notes": "undici DoS via unhandled error on excessive content-encodings. Same single path as GHSA-4qv8-2p9j-2685: npm's bundled undici, not overridable.",
     "expiry": "2026-11-30"
   },
-  "GHSA-6j4f-fj2g-mc7p": {
+  "GHSA-2m5v-pch6-74hx": {
     "active": true,
-    "notes": "brace-expansion uncontrolled recursion in parseCommaParts. Same single path as GHSA-q2hr-2g5m-vwhr.",
+    "notes": "undici TLS certificate validation bypass via dropped tls options in Agent. Same single path as GHSA-4qv8-2p9j-2685: npm's bundled undici, not overridable.",
     "expiry": "2026-11-30"
   },
-  "GHSA-rpw4-54j3-4h4q": {
+  "GHSA-qrxm-fqhp-jwvm": {
     "active": true,
-    "notes": "ip-address isLinkLocal() fe80::/64 vs fe80::/10. We do not parse untrusted addresses. Only copy is node_modules/npm/node_modules/ip-address (10.5.0), inside the npm CLI's bundled dependency tree (pulled in by semantic-release > @semantic-release/npm > npm, overridden to 11.21.0). Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles ip-address >10.7.0.",
+    "notes": "undici DoS via TLS 1.2 certificate-changing renegotiation. Same single path as GHSA-4qv8-2p9j-2685: npm's bundled undici, not overridable.",
     "expiry": "2026-11-30"
   },
-  "GHSA-2vr4-cq9g-pvrc": {
+  "GHSA-9fm3-97px-rjf6": {
     "active": true,
-    "notes": "ip-address NAT64 local-use range not classified. Same single path as GHSA-rpw4-54j3-4h4q.",
-    "expiry": "2026-11-30"
-  },
-  "GHSA-j6r3-76f7-8jcv": {
-    "active": true,
-    "notes": "ip-address cross-family isInSubnet() comparison. Same single path as GHSA-rpw4-54j3-4h4q.",
-    "expiry": "2026-11-30"
-  },
-  "GHSA-h3mg-xc3c-68pw": {
-    "active": true,
-    "notes": "ip-address unbounded parse diagnostic. Same single path as GHSA-rpw4-54j3-4h4q.",
-    "expiry": "2026-11-30"
-  },
-  "GHSA-ch52-4w7c-c8xp": {
-    "active": true,
-    "notes": "http-cache-semantics max-stale cross-user cache disclosure. Only copy is node_modules/npm/node_modules/http-cache-semantics (4.2.0), inside the npm CLI's bundled dependency tree (pulled in by semantic-release > @semantic-release/npm > npm, overridden to 11.21.0). Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles http-cache-semantics >4.2.0.",
-    "expiry": "2026-11-30"
-  },
-  "GHSA-rj75-hqrm-r3gf": {
-    "active": true,
-    "notes": "postcss-selector-parser quadratic flat selector parsing. Only copy is node_modules/npm/node_modules/postcss-selector-parser (7.1.4), inside the npm CLI's bundled dependency tree (pulled in by semantic-release > @semantic-release/npm > npm, overridden to 11.21.0). Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles postcss-selector-parser >=7.1.6.",
-    "expiry": "2026-11-30"
-  },
-  "GHSA-3wwx-pv8p-q78v": {
-    "active": true,
-    "notes": "undici WebSocket permessage-deflate DoS. The top-level undici is pinned to the patched 6.29.0 via `overrides`; Only copy is node_modules/npm/node_modules/undici (6.28.0, via npm > node-gyp), inside the npm CLI's bundled dependency tree (pulled in by semantic-release > @semantic-release/npm > npm, overridden to 11.21.0). Bundled deps are frozen in npm's published tarball and cannot be reached by `overrides`. Release-time tooling only, never reachable from compiler or runtime code. Remove once npm bundles undici >6.28.0.",
-    "expiry": "2026-11-30"
-  },
-  "GHSA-r53p-7pc4-xj5r": {
-    "active": true,
-    "notes": "undici response splitting via retry interceptor. Same single path as GHSA-3wwx-pv8p-q78v: npm's bundled undici, not overridable.",
-    "expiry": "2026-11-30"
-  },
-  "GHSA-rfgv-xxqx-mfg5": {
-    "active": true,
-    "notes": "undici DoS via unrequested WebSocket subprotocol. Same single path as GHSA-3wwx-pv8p-q78v: npm's bundled undici, not overridable.",
+    "notes": "undici WebSocket client DoS via unbounded automatic PONG buffering. Same single path as GHSA-4qv8-2p9j-2685: npm's bundled undici, not overridable.",
     "expiry": "2026-11-30"
   }
 }
