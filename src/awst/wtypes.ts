@@ -25,7 +25,7 @@ export namespace wtypes {
      * Note that field order matters (e.g. `{ a; b }` =/= `{ b; a }`).
      */
     hasSameStructure(other: WType): boolean {
-      return structureKey(this) === structureKey(other)
+      return sameStructure(this, other, new Map())
     }
 
     toString(): string {
@@ -353,13 +353,39 @@ export namespace wtypes {
     immutable: true,
   })
 
-  function structureKey(t: WType): string {
-    const kind = `${t.constructor.name}${t.immutable ? '' : '!'}`
-    if (t instanceof ARC4Struct) return `${kind}{${t.fields.map((f) => `${f.name}:${structureKey(f.wtype)}`)}}`
-    if (t instanceof WTuple) return `${kind}(${t.types.map((x, i) => `${t.names?.[i] ?? ''}:${structureKey(x)}`)})`
-    if (t instanceof ARC4Tuple) return `${kind}(${t.types.map(structureKey)})`
-    if (t instanceof ARC4StaticArray) return `${kind}[${structureKey(t.elementType)};${t.arraySize}]`
-    if (t instanceof ARC4DynamicArray || t instanceof ReferenceArray) return `${kind}[${structureKey(t.elementType)}]`
-    return `${kind}:${t.name}`
+  /**
+   * Compares the compiled structure of `a` and `b` (see `hasSameStructure`).
+   * `visited` records the pairs already compared, so each pair is only compared once
+   * (avoids repeating the comparison for subtypes used more than once)
+   */
+  function sameStructure(a: WType, b: WType, visited: Map<WType, Set<WType>>): boolean {
+    // A visited pair either matched or is still being compared, as any mismatch ends the whole comparison
+    if (a === b || visited.get(a)?.has(b)) return true
+    visited.set(a, (visited.get(a) ?? new Set<WType>()).add(b))
+
+    if (a.constructor !== b.constructor || a.immutable !== b.immutable) return false
+
+    if (a instanceof ARC4Struct && b instanceof ARC4Struct) {
+      if (a.fields.length !== b.fields.length) return false
+      return a.fields.every((f, i) => f.name === b.fields[i].name && sameStructure(f.wtype, b.fields[i].wtype, visited))
+    }
+    if (a instanceof WTuple && b instanceof WTuple) {
+      if (a.types.length !== b.types.length) return false
+      return a.types.every((t, i) => a.names?.[i] === b.names?.[i] && sameStructure(t, b.types[i], visited))
+    }
+    if (a instanceof ARC4Tuple && b instanceof ARC4Tuple) {
+      if (a.types.length !== b.types.length) return false
+      return a.types.every((t, i) => sameStructure(t, b.types[i], visited))
+    }
+    if (a instanceof ARC4StaticArray && b instanceof ARC4StaticArray) {
+      return a.arraySize === b.arraySize && sameStructure(a.elementType, b.elementType, visited)
+    }
+    if (a instanceof ARC4DynamicArray && b instanceof ARC4DynamicArray) {
+      return sameStructure(a.elementType, b.elementType, visited)
+    }
+    if (a instanceof ReferenceArray && b instanceof ReferenceArray) {
+      return sameStructure(a.elementType, b.elementType, visited)
+    }
+    return a.name === b.name
   }
 }
