@@ -6,7 +6,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 describe('abstract-methods', () => {
   const test = createArc4TestFixture({
     paths: 'tests/approvals/abstract-methods.algo.ts',
-    contracts: { First: {}, Second: {}, Caller: {}, ProvidesValue: {} },
+    contracts: { First: {}, Second: {}, Caller: {} },
   })
 
   const call = async (client: AppClient, method: string, ...args: unknown[]) =>
@@ -27,10 +27,5 @@ describe('abstract-methods', () => {
   test('abstract ABI methods can be called', async ({ appClientCaller, appClientSecond }) => {
     await appClientCaller.fundAppAccount({ amount: algo(1) })
     expect(await call(appClientCaller, 'callLabel', appClientSecond.appId)).toBe('second')
-  })
-
-  test('prototype calls to an abstract override reach the inherited implementation', async ({ appClientProvidesValue }) => {
-    expect(await call(appClientProvidesValue, 'value')).toBe(2n)
-    expect(await call(appClientProvidesValue, 'fromPrototype')).toBe(1n)
   })
 })

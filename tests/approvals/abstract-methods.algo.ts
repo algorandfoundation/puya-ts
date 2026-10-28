@@ -78,7 +78,7 @@ export class Programs extends ProgramBase {
   }
 }
 
-// An inherited method can be redeclared as abstract. A prototype call then reaches the inherited body, as in vanilla ts
+// An inherited method can be redeclared as abstract
 class Defaults extends Contract {
   value(): uint64 {
     return 1
@@ -92,9 +92,5 @@ abstract class RequiresValue extends Defaults {
 export class ProvidesValue extends RequiresValue {
   value(): uint64 {
     return 2
-  }
-
-  fromPrototype(): uint64 {
-    return RequiresValue.prototype.value()
   }
 }

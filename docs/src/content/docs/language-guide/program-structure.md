@@ -261,7 +261,7 @@ class CountByTen extends Counter {
 }
 ```
 
-Only concrete contracts produce compilation artifacts, and they must implement every inherited abstract method. An abstract method has no implementation, so it cannot be called through `super` or a class prototype (e.g. `Counter.prototype.step()`), unless it redeclares an inherited method as `abstract override`, in which case the inherited implementation is called, as it is in TypeScript. Public abstract methods on an ARC4 contract can still be referenced by `arc4.abiCall` and `arc4.methodSelector`, which use the declaration's signature and default ABI name. Since TypeScript does not allow decorators on abstract methods, apply any decorators to the concrete implementation.
+Only concrete contracts produce compilation artifacts, and they must implement every inherited abstract method. Abstract methods can only be called through `this`, not through `super` or `super.class(...)`. Public abstract methods on an ARC4 contract can still be referenced by `arc4.abiCall` and `arc4.methodSelector`, which use the declaration's signature and default ABI name. Since TypeScript does not allow decorators on abstract methods, apply any decorators to the concrete implementation.
 
 Method signatures and storage types **must** still be concrete Algorand TypeScript types (parametric types are not supported as of today).
 

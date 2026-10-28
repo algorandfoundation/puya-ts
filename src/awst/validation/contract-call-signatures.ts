@@ -38,7 +38,7 @@ export class ContractCallSignatures extends FunctionTraverser {
     if (target instanceof InstanceSuperMethodTarget)
       return this.resolveContractMethod(target.memberName, mro, indexOf(this.caller.cref) + 1)
 
-    // X.prototype.m() or super.class(X).m(): search from X down
+    // super.class(X).m(): search from X down
     if (target instanceof ContractMethodTarget) {
       const index = indexOf(target.cref)
       if (index !== -1) return this.resolveContractMethod(target.memberName, mro, index)
