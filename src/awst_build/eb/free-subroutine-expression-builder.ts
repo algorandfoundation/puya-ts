@@ -1,16 +1,8 @@
 import type ts from 'typescript'
 import { ContractReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
-import type {
-  ContractMethodTarget,
-  Expression,
-  InstanceMethodTarget,
-  InstanceSuperMethodTarget,
-  LValue,
-  MethodConstant,
-  SubroutineID,
-} from '../../awst/nodes'
-import { ARC4ABIMethodConfig } from '../../awst/nodes'
+import type { ContractMethodTarget, Expression, InstanceSuperMethodTarget, LValue, MethodConstant, SubroutineID } from '../../awst/nodes'
+import { ARC4ABIMethodConfig, InstanceMethodTarget } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError } from '../../errors'
 import { codeInvariant } from '../../util'
@@ -73,7 +65,7 @@ export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder
     sourceLocation: SourceLocation,
     ptype: FunctionPType,
     public readonly contractType: ContractClassPType,
-    dispatch: 'instance' | 'contract',
+    private readonly dispatch: 'instance' | 'contract' | 'prototype',
   ) {
     super(
       sourceLocation,
@@ -87,6 +79,22 @@ export class ContractMethodExpressionBuilder extends SubroutineExpressionBuilder
             memberName: ptype.name,
           }),
     )
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
+    // `Base.prototype.m` can still be referenced, e.g. by `methodSelector`, but not called
+    codeInvariant(
+      this.dispatch !== 'prototype',
+      `Contract methods cannot be called through a class prototype. Use \`this.${this.ptype.name}()\`, \`super.${this.ptype.name}()\` or \`super.class(...).${this.ptype.name}()\` instead`,
+      sourceLocation,
+    )
+    // The TypeScript checker rejects `super.m()` on an abstract method, but not `super.class(Base).m()`
+    codeInvariant(
+      !this.ptype.isAbstract || this.target instanceof InstanceMethodTarget,
+      `${this.contractType.name}.${this.ptype.name} is abstract. Call it through \`this\` so the concrete contract's implementation is used`,
+      sourceLocation,
+    )
+    return super.call(args, typeArgs, sourceLocation)
   }
 
   getMethodSelector(sourceLocation = this.sourceLocation): MethodConstant {

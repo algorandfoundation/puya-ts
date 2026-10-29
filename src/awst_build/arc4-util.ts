@@ -1,7 +1,9 @@
 import { nodeFactory } from '../awst/node-factory'
+import type { ARC4MethodConfig } from '../awst/nodes'
 import { ARC4ABIMethodConfig } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
 import { wtypes } from '../awst/wtypes'
+import { logger } from '../logger'
 import { codeInvariant, invariant } from '../util'
 import { AwstBuildContext } from './context/awst-build-context'
 import type { FunctionPType } from './ptypes'
@@ -48,4 +50,44 @@ export function buildArc4MethodConstant(functionType: FunctionPType, arc4Config:
     wtype: new wtypes.BytesWType({ length: 4n }),
     sourceLocation,
   })
+}
+
+/**
+ * Reports each way an implementation would change the selector w.r.t. the abstract declaration of a public function.
+ * Routing options such as `allowActions` and `onCreate` may still differ
+ */
+export function checkAbstractAbiImplementation({
+  declaration,
+  implementation,
+  sourceLocation,
+}: {
+  declaration: { name: string; type: FunctionPType; config: ARC4ABIMethodConfig }
+  implementation: { name: string; type: FunctionPType; config: ARC4MethodConfig | null | undefined }
+  sourceLocation: SourceLocation
+}) {
+  const { config } = implementation
+  if (!(config instanceof ARC4ABIMethodConfig)) {
+    logger.error(sourceLocation, `${implementation.name} must be an ABI method to match the abstract ABI method ${declaration.name}`)
+    return
+  }
+  if (config.name !== declaration.config.name) {
+    logger.error(
+      sourceLocation,
+      `${implementation.name} must keep the ABI name '${declaration.config.name}' of the abstract ABI method ${declaration.name}, but it uses '${config.name}'`,
+    )
+  }
+  if (config.resourceEncoding !== declaration.config.resourceEncoding) {
+    logger.error(
+      sourceLocation,
+      `${implementation.name} must keep the resource encoding '${declaration.config.resourceEncoding}' of the abstract ABI method ${declaration.name}, but it uses '${config.resourceEncoding}'`,
+    )
+  }
+  const expected = declaration.type.parameters
+  const actual = implementation.type.parameters
+  if (actual.length !== expected.length || actual.some(([, t], i) => !t.wtypeOrThrow.hasSameStructure(expected[i][1].wtypeOrThrow))) {
+    logger.error(sourceLocation, `${implementation.name} must keep the parameter types of the abstract ABI method ${declaration.name}`)
+  }
+  if (!implementation.type.returnType.wtypeOrThrow.hasSameStructure(declaration.type.returnType.wtypeOrThrow)) {
+    logger.error(sourceLocation, `${implementation.name} must keep the return type of the abstract ABI method ${declaration.name}`)
+  }
 }

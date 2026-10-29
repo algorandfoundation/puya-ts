@@ -1,0 +1,344 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 8 1 0 10
+    bytecblock 0x151f7c75 0x
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/abstract-methods.algo.ts:34
+    // export class First extends Intermediate {
+    txn NumAppArgs
+    intc_2 // 0
+    !=
+    bz main___algots__.defaultCreate@12
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    // tests/approvals/abstract-methods.algo.ts:34
+    // export class First extends Intermediate {
+    txn OnCompletion
+    intc_2 // NoOp
+    ==
+    assert
+    txn ApplicationID
+    intc_2 // 0
+    !=
+    bz main_create_NoOp@10
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
+    // tests/approvals/abstract-methods.algo.ts:34
+    // export class First extends Intermediate {
+    txna ApplicationArgs 0
+    pushbytes 0x8a8e99db // method "label()string"
+    pushbytes 0x6a8b798a // method "doubleBalance(uint64)uint64"
+    pushbytes 0x82685c0e // method "getEmpty(uint64)(uint64,uint64)"
+    pushbytes 0x2cb25118 // method "describe()string"
+    pushbytes 0x5d21aa45 // method "summary(uint64)(string,uint64)"
+    uncover 5
+    match main_label_route@4 main_doubleBalance_route@5 main_getEmpty_route@6 main_describe_route@7 main_summary_route@8
+    b main_switch_case_next@9
+
+main_switch_case_next@9:
+    b main_after_if_else@11
+
+main_after_if_else@11:
+    b main_after_if_else@13
+
+main_after_if_else@13:
+    // tests/approvals/abstract-methods.algo.ts:34
+    // export class First extends Intermediate {
+    err
+
+main_summary_route@8:
+    // tests/approvals/abstract-methods.algo.ts:21
+    // summary(id: uint64): [string, uint64] {
+    callsub summary
+    b main_switch_case_next@9
+
+main_describe_route@7:
+    // tests/approvals/abstract-methods.algo.ts:16
+    // describe(): string {
+    callsub describe
+    b main_switch_case_next@9
+
+main_getEmpty_route@6:
+    // tests/approvals/abstract-methods.algo.ts:12
+    // getEmpty(id: uint64): Entry {
+    callsub getEmpty
+    b main_switch_case_next@9
+
+main_doubleBalance_route@5:
+    // tests/approvals/abstract-methods.algo.ts:29
+    // doubleBalance(id: uint64): uint64 {
+    callsub doubleBalance
+    b main_switch_case_next@9
+
+main_label_route@4:
+    // tests/approvals/abstract-methods.algo.ts:39
+    // label(): string {
+    callsub label
+    b main_switch_case_next@9
+
+main_create_NoOp@10:
+    b main_after_if_else@11
+
+main___algots__.defaultCreate@12:
+    // tests/approvals/abstract-methods.algo.ts:34
+    // export class First extends Intermediate {
+    txn OnCompletion
+    intc_2 // NoOp
+    ==
+    txn ApplicationID
+    intc_2 // 0
+    ==
+    &&
+    assert
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::First.label[routing]() -> void:
+label:
+    b label_block@0
+
+label_block@0:
+    // tests/approvals/abstract-methods.algo.ts:39
+    // label(): string {
+    callsub tests/approvals/abstract-methods.algo.ts::First.label
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Intermediate.doubleBalance[routing]() -> void:
+doubleBalance:
+    b doubleBalance_block@0
+
+doubleBalance_block@0:
+    // tests/approvals/abstract-methods.algo.ts:29
+    // doubleBalance(id: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/abstract-methods.algo.ts::Intermediate.doubleBalance
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.getEmpty[routing]() -> void:
+getEmpty:
+    b getEmpty_block@0
+
+getEmpty_block@0:
+    // tests/approvals/abstract-methods.algo.ts:12
+    // getEmpty(id: uint64): Entry {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/abstract-methods.algo.ts::Base.getEmpty
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.describe[routing]() -> void:
+describe:
+    b describe_block@0
+
+describe_block@0:
+    // tests/approvals/abstract-methods.algo.ts:16
+    // describe(): string {
+    callsub tests/approvals/abstract-methods.algo.ts::Base.describe
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.summary[routing]() -> void:
+summary:
+    b summary_block@0
+
+summary_block@0:
+    // tests/approvals/abstract-methods.algo.ts:21
+    // summary(id: uint64): [string, uint64] {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/abstract-methods.algo.ts::Base.summary
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/abstract-methods.algo.ts::First.empty(id: uint64) -> bytes:
+empty:
+    // tests/approvals/abstract-methods.algo.ts:35
+    // protected empty(id: uint64): Entry {
+    proto 1 1
+    b empty_block@0
+
+empty_block@0:
+    // tests/approvals/abstract-methods.algo.ts:36
+    // return { id, balance: 10 }
+    frame_dig -1
+    itob
+    bytec_1 // 0x
+    uncover 1
+    concat
+    intc_3 // 10
+    itob
+    concat
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::First.label() -> bytes:
+tests/approvals/abstract-methods.algo.ts::First.label:
+    b tests/approvals/abstract-methods.algo.ts::First.label_block@0
+
+tests/approvals/abstract-methods.algo.ts::First.label_block@0:
+    // tests/approvals/abstract-methods.algo.ts:40
+    // return 'first'
+    pushbytes "first"
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::Intermediate.doubleBalance(id: uint64) -> uint64:
+tests/approvals/abstract-methods.algo.ts::Intermediate.doubleBalance:
+    // tests/approvals/abstract-methods.algo.ts:29
+    // doubleBalance(id: uint64): uint64 {
+    proto 1 1
+    b tests/approvals/abstract-methods.algo.ts::Intermediate.doubleBalance_block@0
+
+tests/approvals/abstract-methods.algo.ts::Intermediate.doubleBalance_block@0:
+    // tests/approvals/abstract-methods.algo.ts:30
+    // return this.empty(id).balance * 2
+    frame_dig -1
+    callsub empty
+    intc_0 // 8
+    intc_0 // 8
+    extract3
+    btoi
+    pushint 2
+    *
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.getEmpty(id: uint64) -> bytes:
+tests/approvals/abstract-methods.algo.ts::Base.getEmpty:
+    // tests/approvals/abstract-methods.algo.ts:12
+    // getEmpty(id: uint64): Entry {
+    proto 1 1
+    b tests/approvals/abstract-methods.algo.ts::Base.getEmpty_block@0
+
+tests/approvals/abstract-methods.algo.ts::Base.getEmpty_block@0:
+    // tests/approvals/abstract-methods.algo.ts:13
+    // return this.empty(id)
+    frame_dig -1
+    callsub empty
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.describe() -> bytes:
+tests/approvals/abstract-methods.algo.ts::Base.describe:
+    b tests/approvals/abstract-methods.algo.ts::Base.describe_block@0
+
+tests/approvals/abstract-methods.algo.ts::Base.describe_block@0:
+    // tests/approvals/abstract-methods.algo.ts:17
+    // return this.label()
+    callsub tests/approvals/abstract-methods.algo.ts::First.label
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::Base.summary(id: uint64) -> bytes:
+tests/approvals/abstract-methods.algo.ts::Base.summary:
+    // tests/approvals/abstract-methods.algo.ts:21
+    // summary(id: uint64): [string, uint64] {
+    proto 1 1
+    b tests/approvals/abstract-methods.algo.ts::Base.summary_block@0
+
+tests/approvals/abstract-methods.algo.ts::Base.summary_block@0:
+    // tests/approvals/abstract-methods.algo.ts:22
+    // return [this.label(), this.empty(id).balance]
+    callsub tests/approvals/abstract-methods.algo.ts::First.label
+    frame_dig -1
+    callsub empty
+    intc_0 // 8
+    intc_0 // 8
+    extract3
+    btoi
+    cover 1
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    intc_3 // 10
+    itob
+    extract 6 2
+    bytec_1 // 0x
+    uncover 1
+    concat
+    uncover 2
+    itob
+    concat
+    uncover 1
+    concat
+    retsub
+
+
+// tests/approvals/abstract-methods.algo.ts::First.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub

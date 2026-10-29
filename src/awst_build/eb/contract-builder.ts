@@ -220,7 +220,7 @@ class ContractClassPrototypeBuilder extends NodeBuilder {
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     const method = this.ptype.methods[name]
     if (method) {
-      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype, 'contract')
+      return new ContractMethodExpressionBuilder(sourceLocation, method, this.ptype, 'prototype')
     }
     return super.memberAccess(name, sourceLocation)
   }
